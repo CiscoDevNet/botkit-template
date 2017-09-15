@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}/bot.js",
+            "envFile": "${workspaceRoot}/.env",
+            "env": {
+                "SPARK_TOKEN": "PLACE_YOUR_BOT_TOKEN_HERE_FOR_DEBUG_PURPOSE",
+                "PUBLIC_URL": "https://e1e50a26.ngrok.io"
+            }
+        }
+    ]
+}
