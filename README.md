@@ -2,11 +2,11 @@
 
 This template regroups a set of best practices:
 
-- configuration: pass settings either through environment variables on the command line, or hard-cod values in the `.env` file. Note that command line variables are priorized over the `.env`file if present in both places.
+- configuration: pass settings either through environment variables on the command line, or hard-coded values in the `.env` file. Note that command line variables are priorized over the `.env` file if present in both places.
 
-- skills: organize your bot behaviours by placing 'hear commands', 'convos' and 'events' in the [skills directory](skills/README.md). The bot comes with a ".commons", "help", "fallback" and "welcome" skills.
+- skills: organize your bot behaviours by placing 'commands', 'conversations' and 'events' in the [skills directory](skills/README.md).
 
-- user experience: comes with a 'welcome' invite, as well as help and 'fallback' commands, ready to be customized for your own bot purpose.
+- user experience: the template comes ready-to-use skills: a 'welcome' invite, as well as 'help' and 'fallback' commands.
 
 - healthcheck: easilly check that everything goes well by hitting the `ping` endpoint automatically exposed.
 
@@ -14,8 +14,10 @@ This template regroups a set of best practices:
 
 - mentions: the enrichCommand utility helps you add mentions in Group spaces.
 
+- popular cloud providers: the template self-configures when run on Heroku and Glitch
 
-## How to run
+
+## How to run (on your local machine)
 
 Assuming you plan to expose your bot via [ngrok](https://ngrok.com),
 you can run this template in a snatch.
@@ -63,3 +65,12 @@ you can run this template in a snatch.
     - SPARK_TOKEN is the API access token of your Cisco Spark bot
     - PUBLIC_URL is the root URL at which Cisco Spark can reach your bot
     - [ngrok](http://ngrok.com) helps you expose the bot running on your laptop to the internet, type: `ngrok http 3000` to launch
+
+
+## Quick start on Glitch/Heroku
+
+Create a new project pointing to this repo, and set the "SPARK_TOKEN" environment variable with your bot's token.
+
+You bot is all set:
+- responding in 1-1 and 'group' spaces: type help
+- its healthcheck is accessible at your app public url, suffixed with "/ping" 

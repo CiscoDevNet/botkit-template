@@ -3,17 +3,12 @@
 // Licensed under the MIT License 
 //
 
-
-// Load env variables 
-var env = require('node-env-file');
-env(__dirname + '/.env');
-
-
 //
-// BotKit initialization
+// BotKit configuration
 //
 
-var Botkit = require('botkit');
+// Load environment variables from project .env file
+require('node-env-file')(__dirname + '/.env');
 
 if (!process.env.SPARK_TOKEN) {
     console.log("Could not start as bots require a Cisco Spark API access token.");
@@ -23,7 +18,22 @@ if (!process.env.SPARK_TOKEN) {
     process.exit(1);
 }
 
-if (!process.env.PUBLIC_URL) {
+// Get public URL where Cisco Spark will post spaces notifications (webhook registration)
+var public_url = process.env.PUBLIC_URL;
+// Infer the app domain for popular Cloud PaaS
+if (!public_url) {
+
+    // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
+    if (process.env.HEROKU_APP_NAME) {
+        public_url = "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com"
+    }
+
+    // Glitch hosting
+    if (process.env.PROJECT_DOMAIN) {
+        public_url = "https://" + process.env.PROJECT_DOMAIN + ".glitch.me"
+    }
+}
+if (!public_url) {
     console.log("Could not start as this bot must expose a public endpoint.");
     console.log("Please add env variable PUBLIC_URL on the command line or to the .env file");
     console.log("Example: ");
@@ -31,11 +41,17 @@ if (!process.env.PUBLIC_URL) {
     process.exit(1);
 }
 
-var env = process.env.NODE_ENV || "development";
 
+//
+// Create bot
+//
+
+var Botkit = require('botkit');
+
+var env = process.env.NODE_ENV || "development";
 var controller = Botkit.sparkbot({
     log: true,
-    public_address: process.env.PUBLIC_URL,
+    public_address: public_url,
     ciscospark_access_token: process.env.SPARK_TOKEN,
     secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks of incoming payloads originate from Cisco Spark
     webhook_name: process.env.WEBHOOK_NAME || ('built with BotKit (' + env + ')')
@@ -57,11 +73,11 @@ controller.setupWebserver(port, function (err, webserver) {
 
     // installing Healthcheck
     var healthcheck = {
-        "up-since" : new Date(Date.now()).toGMTString(),
-        "hostname" : require('os').hostname() + ":" + port,
-        "version"  : "v" + require("./package.json").version,
-        "bot"      : "unknown",   // loaded asynchronously
-        "botkit"   : "v" + bot.botkit.version()
+        "up-since": new Date(Date.now()).toGMTString(),
+        "hostname": require('os').hostname() + ":" + port,
+        "version": "v" + require("./package.json").version,
+        "bot": "unknown",   // loaded asynchronously
+        "botkit": "v" + bot.botkit.version()
     };
     webserver.get("/ping", function (req, res) {
 
