@@ -2,11 +2,17 @@
 
 This template regroups a set of best practices:
 
-- configuration: pass settings either through environment variables on the command line, or by hardcoding some of them in the `.env` file. Note that env variable are priorized over the `env`file if values are found in both places.
-
-- healthcheck: check if everything is going well by hitting the `ping` endpoint exposed automatically. 
+- configuration: pass settings either through environment variables on the command line, or hard-cod values in the `.env` file. Note that command line variables are priorized over the `.env`file if present in both places.
 
 - skills: organize your bot behaviours by placing 'hear commands', 'convos' and 'events' in the [skills directory](skills/README.md). The bot comes with a ".commons", "help", "fallback" and "welcome" skills.
+
+- user experience: comes with a 'welcome' invite, as well as help and 'fallback' commands, ready to be customized for your own bot purpose.
+
+- healthcheck: easilly check that everything goes well by hitting the `ping` endpoint automatically exposed.
+
+- metadata: expose extra info via command and on a public address so that Spark users can inquire on Bot Author / Legal mentions / Healthcheck endpoint...
+
+- mentions: the enrichCommand utility helps you add mentions in Group spaces.
 
 
 ## How to run

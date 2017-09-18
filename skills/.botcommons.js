@@ -33,14 +33,16 @@ module.exports = function (controller) {
         "botcommons": "draft",
     }
 
+    //
     // Adding a metadata endpoint
+    //
     controller.webserver.get("/botcommons", function (req, res) {
         res.json(botcommons);
     });
     console.log("CiscoSpark: Bot metadata available at: /botcommons");
 
     //
-    // .commons skill
+    // .botcommons skill
     //
     controller.hears([/^\.about$/, /^\.commons$/, /^\.bot$/, /^\.ping$/], 'direct_message,direct_mention', function (bot, message) {
 
