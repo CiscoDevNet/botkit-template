@@ -1,6 +1,6 @@
 {
   "description": "Botkit template for Cisco Spark",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"

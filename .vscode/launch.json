@@ -9,7 +9,7 @@
             "envFile": "${workspaceRoot}/.env",
             "env": {
                 "SPARK_TOKEN": "PLACE_YOUR_BOT_TOKEN_HERE_FOR_DEBUG_PURPOSE",
-                "PUBLIC_URL": "https://e1e50a26.ngrok.io"
+                "PUBLIC_URL": "https://718670a3.ngrok.io"
             }
         }
     ]

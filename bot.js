@@ -44,31 +44,45 @@ var controller = Botkit.sparkbot({
 var bot = controller.spawn({
 });
 
-// Load BotCommons properties
-bot.commons = {};
-bot.commons["healthcheck"] = process.env.PUBLIC_URL + "/ping";
-bot.commons["up-since"] = new Date(Date.now()).toGMTString();
-bot.commons["version"] = "v" + require("./package.json").version;
-bot.commons["owner"] = process.env.owner;
-bot.commons["support"] = process.env.support;
-bot.commons["platform"] = process.env.platform;
-bot.commons["nickname"] = process.env.BOT_NICKNAME || "unknown";
-bot.commons["code"] = process.env.code;
 
-// Start Bot API
-controller.setupWebserver(process.env.PORT || 3000, function (err, webserver) {
+//
+// Launch bot
+//
+
+var port = process.env.PORT || 3000;
+controller.setupWebserver(port, function (err, webserver) {
     controller.createWebhookEndpoints(webserver, bot, function () {
         console.log("Cisco Spark: Webhooks set up!");
     });
 
     // installing Healthcheck
-    webserver.get('/ping', function (req, res) {
-        res.json(bot.commons);
+    var healthcheck = {
+        "up-since" : new Date(Date.now()).toGMTString(),
+        "hostname" : require('os').hostname() + ":" + port,
+        "version"  : "v" + require("./package.json").version,
+        "bot"      : "unknown",   // loaded asynchronously
+        "botkit"   : "v" + bot.botkit.version()
+    };
+    webserver.get("/ping", function (req, res) {
+
+        // As the identity is load asynchronously, we need to check if it's been fetched
+        if (healthcheck.bot == "unknown") {
+            var identity = bot.botkit.identity;
+            if (bot.botkit.identity) {
+                healthcheck.bot = bot.botkit.identity.emails[0];
+            }
+        }
+
+        res.json(healthcheck);
     });
-    console.log("Cisco Spark: healthcheck available at: " + bot.commons.healthcheck);
+    console.log("Cisco Spark: healthcheck available at: /ping");
 });
 
+
+//
 // Load skills
+//
+
 var normalizedPath = require("path").join(__dirname, "skills");
 require("fs").readdirSync(normalizedPath).forEach(function (file) {
     try {
@@ -84,6 +98,11 @@ require("fs").readdirSync(normalizedPath).forEach(function (file) {
     }
 });
 
+
+//
+// Cisco Spark Utilities
+//
+
 // Utility to add mentions if Bot is in a 'Group' space
 bot.enrichCommand = function (message, command) {
     var botName = process.env.BOT_NICKNAME || "BotName";
@@ -96,7 +115,5 @@ bot.enrichCommand = function (message, command) {
         }
     }
 
-
     return "`" + command + "`";
 }
-
