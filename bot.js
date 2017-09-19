@@ -25,12 +25,12 @@ if (!public_url) {
 
     // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
     if (process.env.HEROKU_APP_NAME) {
-        public_url = "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com"
+        public_url = "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com";
     }
 
     // Glitch hosting
     if (process.env.PROJECT_DOMAIN) {
-        public_url = "https://" + process.env.PROJECT_DOMAIN + ".glitch.me"
+        public_url = "https://" + process.env.PROJECT_DOMAIN + ".glitch.me";
     }
 }
 if (!public_url) {
@@ -81,7 +81,7 @@ controller.setupWebserver(port, function (err, webserver) {
     };
     webserver.get("/ping", function (req, res) {
 
-        // As the identity is load asynchronously, we need to check if it's been fetched
+        // As the identity is load asynchronously from Cisco Spark token, we need to check until it's fetched
         if (healthcheck.bot == "unknown") {
             var identity = bot.botkit.identity;
             if (bot.botkit.identity) {

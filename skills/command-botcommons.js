@@ -27,7 +27,7 @@ module.exports = function (controller) {
         "identity": "convos@sparkbot.io",
 
         // Endpoint where to check the bot is alive
-        "healthcheck": "http://127.0.0.1:3000/ping",
+        "healthcheck": controller.config.public_address + "/ping",
 
         // BotCommons specifications version (should be an href)
         "botcommons": "draft",
