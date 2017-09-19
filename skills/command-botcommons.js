@@ -27,7 +27,7 @@ module.exports = function (controller) {
         "identity": "convos@sparkbot.io",
 
         // Endpoint where to check the bot is alive
-        "healthcheck": controller.config.public_address + "/ping",
+        "healthcheck": "https://" + controller.config.public_address + process.env.HEALTHCHECK_ROUTE,
 
         // BotCommons specifications version (should be an href)
         "botcommons": "draft",
@@ -36,10 +36,10 @@ module.exports = function (controller) {
     //
     // Adding a metadata endpoint
     //
-    controller.webserver.get("/botcommons", function (req, res) {
+    controller.webserver.get(process.env.BOTCOMMONS_ROUTE, function (req, res) {
         res.json(botcommons);
     });
-    console.log("CiscoSpark: Bot metadata available at: /botcommons");
+    console.log("CiscoSpark: Bot metadata available at: " + process.env.BOTCOMMONS_ROUTE);
 
     //
     // .botcommons skill

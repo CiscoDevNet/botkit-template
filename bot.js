@@ -79,7 +79,7 @@ controller.setupWebserver(port, function (err, webserver) {
         "bot": "unknown",   // loaded asynchronously
         "botkit": "v" + bot.botkit.version()
     };
-    webserver.get("/ping", function (req, res) {
+    webserver.get(process.env.HEALTHCHECK_ROUTE, function (req, res) {
 
         // As the identity is load asynchronously from Cisco Spark token, we need to check until it's fetched
         if (healthcheck.bot == "unknown") {
@@ -91,7 +91,7 @@ controller.setupWebserver(port, function (err, webserver) {
 
         res.json(healthcheck);
     });
-    console.log("Cisco Spark: healthcheck available at: /ping");
+    console.log("Cisco Spark: healthcheck available at: " + process.env.HEALTHCHECK_ROUTE);
 });
 
 
