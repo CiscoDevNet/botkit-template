@@ -12,7 +12,7 @@ module.exports = function (controller, bot) {
         "description": "It's an awesome bot for sure!",
 
         // Where to get more information about the bot
-        "url": "https://github.com/CiscoDevNet/botkit-ciscospark-samples",
+        "url": "https://github.com/CiscoDevNet/botkit-template",
 
         // Legal owner
         "legal-owner": "Cisco DevNet <https://developer.cisco.com>",
@@ -48,7 +48,7 @@ module.exports = function (controller, bot) {
     //
     // .botcommons skill
     //
-    controller.hears([/^\about$/, /^\botcommons$/, /^\.commons$/, /^\.bot$/], 'direct_message,direct_mention', function (bot, message) {
+    controller.hears([/^about$/, /^botcommons$/, /^\.commons$/, /^\.bot$/], 'direct_message,direct_mention', function (bot, message) {
 
         // Return metadata
         var metadata = '{\n'

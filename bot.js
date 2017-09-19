@@ -121,15 +121,17 @@ require("fs").readdirSync(normalizedPath).forEach(function (file) {
 
 // Utility to add mentions if Bot is in a 'Group' space
 bot.enrichCommand = function (message, command) {
-    if ("group" == message.roomType) {
+
+    // if the message is a raw message (from a post message callback such as bot.say())
+    if (message.roomType && (message.roomType == "group")) {
         var botName = bot.botkit.identity.displayName;
         return "`@" + botName + " " + command + "`";
     }
-    if (message.original_message) {
-        if ("group" == message.original_message.roomType) {
-            var botName = bot.botkit.identity.displayName;
-            return "`@" + botName + " " + command + "`";
-        }
+
+    // if the message is a Botkit message
+    if (message.raw_message && (message.raw_message.data.roomType == "group")) {
+        var botName = bot.botkit.identity.displayName;
+        return "`@" + botName + " " + command + "`";
     }
 
     return "`" + command + "`";
