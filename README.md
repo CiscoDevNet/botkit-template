@@ -1,6 +1,13 @@
-# Template to bootstrap a Botkit project for Cisco Spark
+# Botkit Template for Cisco Spark
 
-This template regroups a set of best practices:
+This template regroups a set of best practices to bootstrap a Botkit project connecting to Cisco Spark.
+
+**take a look at the [redis](https://github.com/CiscoDevNet/botkit-template/tree/redis) and [pluggable architecture](https://github.com/CiscoDevNet/botkit-template/tree/plugin) branches for more advanced templates**
+
+**check [Howdy's Botkit StarterKit](https://github.com/howdyai/botkit-starter-ciscospark) if you're planning to use [Botkit Studio](https://studio.botkit.ai/app)**
+
+
+## Features
 
 - configuration: pass settings either through environment variables on the command line, or hard-coded values in the `.env` file. Note that command line variables are priorized over the `.env` file if present in both places.
 
