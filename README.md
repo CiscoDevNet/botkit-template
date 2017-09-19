@@ -14,10 +14,36 @@ This template regroups a set of best practices:
 
 - mentions: the enrichCommand utility helps you add mentions in Group spaces.
 
-- popular cloud providers: the template self-configures when run on Heroku and Glitch
+- popular cloud providers: the bot self-configures when run on Glitch and Heroku (if )
 
 
-## How to run (on your local machine)
+## Quick start on Glitch
+
+Click [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/CiscoDevNet/botkit-template)
+
+Then open the `.env` file and paste your bot's token into the SPARK_TOKEN variable.
+
+You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space,
+Its healthcheck is accessible at your application public url, suffixed with "/ping" 
+
+_Note that thanks to Glitch 'PROJECT_DOMAIN' env variable, you did not need to add a PUBLIC_URL variable pointing to your app domain._
+
+
+## Quick start on Heroku
+
+Create a new project pointing to this repo.
+
+Reach to your app settings, reveal your config variables, and add a SPARK_TOKEN variable with your bot token as value.
+
+Unless your app is using [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata), you also need to add a PUBLIC_URL variable pointing to your app domain.
+
+![](docs/heroku_config-variables.png)
+
+You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space,
+Its healthcheck is accessible at your application public url, suffixed with "/ping" 
+
+
+## How to run on your local machine (with ngrok)
 
 Assuming you plan to expose your bot via [ngrok](https://ngrok.com),
 you can run this template in a snatch.
@@ -43,8 +69,8 @@ you can run this template in a snatch.
     From a bash shell:
 
     ```shell
-    git clone https://github.com/CiscoDevNet/botkit-ciscospark-samples
-    cd template
+    git clone https://github.com/CiscoDevNet/botkit-template
+    cd botkit-template
     npm install
     SPARK_TOKEN=0123456789abcdef PUBLIC_URL=https://abcdef.ngrok.io node bot.js
     ```
@@ -52,8 +78,8 @@ you can run this template in a snatch.
     From a windows shell:
 
     ```shell
-    > git clone https://github.com/CiscoDevNet/botkit-ciscospark-samples
-    > cd template
+    > git clone https://github.com/CiscoDevNet/botkit-template
+    > cd botkit-template
     > npm install
     > set SPARK_TOKEN=0123456789abcdef
     > set PUBLIC_URL=https://abcdef.ngrok.io
@@ -65,12 +91,3 @@ you can run this template in a snatch.
     - SPARK_TOKEN is the API access token of your Cisco Spark bot
     - PUBLIC_URL is the root URL at which Cisco Spark can reach your bot
     - [ngrok](http://ngrok.com) helps you expose the bot running on your laptop to the internet, type: `ngrok http 3000` to launch
-
-
-## Quick start on Glitch/Heroku
-
-Create a new project pointing to this repo, and set the "SPARK_TOKEN" environment variable with your bot's token.
-
-You bot is all set:
-- responding in 1-1 and 'group' spaces: type help
-- its healthcheck is accessible at your app public url, suffixed with "/ping" 
