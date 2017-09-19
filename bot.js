@@ -49,13 +49,47 @@ if (!public_url) {
 var Botkit = require('botkit');
 
 var env = process.env.NODE_ENV || "development";
-var controller = Botkit.sparkbot({
+
+var configuration = {
     log: true,
     public_address: public_url,
     ciscospark_access_token: process.env.SPARK_TOKEN,
     secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks of incoming payloads originate from Cisco Spark
     webhook_name: process.env.WEBHOOK_NAME || ('built with BotKit (' + env + ')')
-});
+}
+
+if (process.env.REDIS_URL) {
+
+    // Initialize Redis storage
+    var redisConfig = {
+        // for local dev:  redis://127.0.0.1:6379
+        // if on heroku :  redis://h:PASSWORD@ec2-54-86-77-126.compute-1.amazonaws.com:60109
+        url: process.env.REDIS_URL
+
+        // uncomment to add extra global key spaces to store data, example:
+        //, methods: ['activities']
+
+        // uncomment to override the Redis namespace prefix, Defaults to 'botkit:store', example:
+        //, namespace: 'cisco:devnet'         
+    };
+
+    // Create Redis storage for BotKit
+    try {
+        var redisStorage = require('botkit-storage-redis')(redisConfig);
+
+        configuration.storage = redisStorage;
+        console.log("Redis storage successfully initialized");
+
+        // Note that we did not ping'ed Redis yet
+        // then a 'ECONNREFUSED' error will be thrown if the Redis can be ping'ed later in the initialization process
+        // which is fine in a "Fail Fast" strategy
+    }
+    catch (err) {
+        console.log("Could not initialise Redis storage, check the provided Redis URL, err: " + err.message);
+    }
+}
+
+var controller = Botkit.sparkbot(configuration);
 
 var bot = controller.spawn({
 });
