@@ -120,7 +120,7 @@ require("fs").readdirSync(normalizedPath).forEach(function (file) {
 //
 
 // Utility to add mentions if Bot is in a 'Group' space
-bot.enrichCommand = function (message, command) {
+bot.appendMention = function (message, command) {
 
     // if the message is a raw message (from a post message callback such as bot.say())
     if (message.roomType && (message.roomType == "group")) {

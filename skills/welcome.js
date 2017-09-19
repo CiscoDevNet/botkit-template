@@ -25,7 +25,7 @@ module.exports = function (controller) {
 
             if (rawMessage.roomType == "group") {
                 help = "Note that this is a 'Group' Space. I will answer only if mentionned.<br/>";
-                help += "To learn about my skills, type " + bot.enrichCommand(rawMessage, "help");
+                help += "To learn about my skills, type " + bot.appendMention(rawMessage, "help");
             }
 
             bot.say({

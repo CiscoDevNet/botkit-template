@@ -12,7 +12,7 @@ This template regroups a set of best practices:
 
 - metadata: expose extra info via command and on a public address so that Spark users can inquire on Bot Author / Legal mentions / Healthcheck endpoint...
 
-- mentions: the enrichCommand utility helps you add mentions in Group spaces.
+- mentions: the appendMention utility function helps Spark users remind to mention the bot in Group spaces.
 
 - popular cloud providers: the bot self-configures when run on Glitch and Heroku (if )
 

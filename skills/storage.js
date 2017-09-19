@@ -6,7 +6,7 @@ module.exports = function (controller) {
     controller.hears([/^storage$/], 'direct_message,direct_mention', function (bot, message) {
 
         // Check if a User preference already exists
-        var userId = message.original_message.personId;
+        var userId = message.raw_message.actorId;
         controller.storage.users.get(userId, function (err, data) {
             if (err) {
                 bot.reply(message, 'could not access storage, err: ' + err.message, function (err, message) {
@@ -32,13 +32,19 @@ function showUserPreference(controller, bot, message, userId, color) {
     bot.startConversation(message, function (err, convo) {
 
         convo.sayFirst(`Hey, I know you <@personId:${userId}>!<br/> '${color}' is your favorite color.`);
-        
-        convo.ask("Should I remove your preference?", [
+
+        // Remove user preferences if supported
+        if (!controller.storage.users.remove) {
+            convo.say("_To erase your preference, simply restart the bot as you're using in-memory transient storage._");
+            convo.next();
+            return;
+        }
+
+        convo.ask("Should I erase your preference?  yes/(no)", [
             {
                 pattern: "^yes|ya|da|si|oui$",
                 callback: function (response, convo) {
 
-                    // Remove user preferences
                     controller.storage.users.remove(userId, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
