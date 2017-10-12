@@ -3,7 +3,9 @@
   "version": "0.6.0",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "ciscospark",
@@ -14,10 +16,12 @@
   "license": "MIT",
   "dependencies": {
     "botkit": "0.6.0",
-    "node-env-file": "0.1.8"
+    "node-env-file": "0.1.8",
+    "snyk": "^1.42.6"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/CiscoDevNet/botkit-template.git"
-  }
+  },
+  "snyk": true
 }
