@@ -14,7 +14,8 @@
   "license": "MIT",
   "dependencies": {
     "botkit": "0.6.0",
-    "node-env-file": "0.1.8"
+    "node-env-file": "0.1.8",
+    "recastai": "^3.7.0"
   },
   "repository": {
     "type": "git",
