@@ -1,6 +1,6 @@
 {
-  "description": "Botkit template for Cisco Spark",
-  "version": "0.6.0",
+  "description": "Maze bot",
+  "version": "0.7.0",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
@@ -13,7 +13,7 @@
   "author": "Stève Sfartz (Cisco DevNet) <stsfartz@cisco.com>",
   "license": "MIT",
   "dependencies": {
-    "botkit": "0.6.0",
+    "botkit": "0.6.12",
     "node-env-file": "0.1.8",
     "recastai": "^3.7.0"
   },
