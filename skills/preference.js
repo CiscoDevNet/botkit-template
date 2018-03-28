@@ -22,37 +22,42 @@ module.exports = function (controller) {
                 return;
             }
 
-            // Ask for favorite color
-            askForFavoriteColor(controller, bot, message, userId);
+            // Ask the user to enter its preferences
+            askForUserPreference(controller, bot, message, userId);
         });
     });
 }
 
-function showUserPreference(controller, bot, message, userId, color) {
+function showUserPreference(controller, bot, message, userId, difficulty) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.sayFirst(`Hey, I know you <@personId:${userId}>!<br/> '${color}' is your favorite color.`);
+        var levels = []
+        levels[0] = 'rookie'
+        levels[1] = 'seasoned'
+        levels[2] = 'expert'
+        var level = levels[difficulty];
+        convo.sayFirst(`Hey, I know you <@personId:${userId}>: your preferred difficulty is '${level}'.`);
 
         // Remove user preferences if supported
-        if (!controller.storage.users.remove) {
+        if (!controller.storage.users.delete) {
             convo.say("_To erase your preference, simply restart the bot as you're using in-memory transient storage._");
             convo.next();
             return;
         }
 
-        convo.ask("Should I erase your preference?  yes/(no)", [
+        convo.ask("Should I erase your preference? yes/(no)", [
             {
                 pattern: "^yes|ya|da|si|oui$",
                 callback: function (response, convo) {
 
-                    controller.storage.users.remove(userId, function (err) {
+                    controller.storage.users.delete(userId, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
                             return;
                         }
 
-                        convo.say("Successfully reset your color preference.");
+                        convo.say("Successfully reset your preference.");
                         convo.next();
                     });
 
@@ -61,7 +66,7 @@ function showUserPreference(controller, bot, message, userId, color) {
             {
                 default: true,
                 callback: function (response, convo) {
-                    convo.say("Got it, leaving your color preference as is.");
+                    convo.say("Got it, leaving your preference as is.");
                     convo.next();
                 }
             }
@@ -69,17 +74,17 @@ function showUserPreference(controller, bot, message, userId, color) {
     });
 }
 
-function askForFavoriteColor(controller, bot, message, userId) {
+function askForUserPreference(controller, bot, message, userId) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.ask("What is your favorite color?", [
+        convo.ask("Which level do you want to play? Rookie(1), Seasoned(2) or Expert(3)", [
             {
-                pattern: "^blue|green|pink|red|yellow$",
+                pattern: "^1|2|3$",
                 callback: function (response, convo) {
 
                     // Store color as user preference
-                    var pickedColor = convo.extractResponse('answer');
-                    var userPreference = { id: userId, value: pickedColor };
+                    var difficulty = parseInt(convo.extractResponse('answer')) - 1;
+                    var userPreference = { id: userId, value: difficulty };
                     controller.storage.users.save(userPreference, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
@@ -87,7 +92,7 @@ function askForFavoriteColor(controller, bot, message, userId) {
                             return;
                         }
 
-                        convo.transitionTo("success", `_stored user preference_`);
+                        convo.gotoThread("success");
                     });
 
                 },
@@ -95,7 +100,7 @@ function askForFavoriteColor(controller, bot, message, userId) {
             {
                 default: true,
                 callback: function (response, convo) {
-                    convo.say("Sorry, I don't know this color. Try another one...");
+                    convo.say("Sorry, I don't know this level. Please enter 1, 2 or 3.");
                     convo.repeat();
                     convo.next();
                 }
@@ -104,7 +109,7 @@ function askForFavoriteColor(controller, bot, message, userId) {
 
         // Success thread
         convo.addMessage(
-            "Cool, I love '{{responses.answer}}' too",
+            "Successfully stored your preference.",
             "success");
     });
 }
