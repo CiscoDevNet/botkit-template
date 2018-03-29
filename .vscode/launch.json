@@ -8,9 +8,8 @@
             "program": "${workspaceRoot}/bot.js",
             "envFile": "${workspaceRoot}/.env",
             "env": {
-                "SPARK_TOKEN": "ZDg0NDg0ZjgtNDQ1OS00NjYwLTliM2MtNzQwZTZjNTdlZGZiZDBkMzAxMzktNDQz",
-                "PUBLIC_URL": "https://fc9237fb.ngrok.io",
-                "DEBUG": "*"
+                "SPARK_TOKEN": "PLACE_YOUR_BOT_TOKEN_HERE_FOR_DEBUG_PURPOSE",
+                "PUBLIC_URL": "https://718670a3.ngrok.io"
             }
         }
     ]
