@@ -5,7 +5,6 @@ module.exports = function (controller) {
 
     controller.hears([/^help$/], 'direct_message,direct_mention', function (bot, message) {
         var text = "Here are my skills:";
-        text += "\n- " + bot.appendMention(message, "maze") + ": launch a new maze game";
         text += "\n- " + bot.appendMention(message, "pref") + ": stores user preferences";
         text += "\n- " + bot.appendMention(message, "recast") + ": interact with a recast Intent";
         text += "\n\nI also understand:";
