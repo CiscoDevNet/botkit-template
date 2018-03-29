@@ -14,17 +14,13 @@ module.exports = function (controller) {
                     pattern: "yes|yeh|sure|oui|si",
                     callback: function (response, convo) {
 
-                        // Check user preference
-                        getPreferredLevel(controller, message, function (err, difficulty) {
-                            
-                            // Initialize a new maze
-                            var maze = createMaze(difficulty, 1000);
+                        // Initialize a new maze
+                        var maze = createMaze(0, 1000);
 
-                            // Associate it to the current convo
-                            convo.setVar("game", maze);
-                            convo.gotoThread('game');
-                        });
+                        // Associate it to the current convo
+                        convo.setVar("game", maze);
 
+                        convo.gotoThread('game');
                     },
                 }
                 , {
@@ -59,7 +55,7 @@ module.exports = function (controller) {
             // Game thread
             convo.addMessage("Then, here you are, lost in a maze looking for a treasure.\n\nYou are starting with **{{vars.game.score}}** points.", "game");
 
-            convo.addQuestion("Please, enter a direction (up/down/left/right or cancel) ", function (response, convo) {
+            convo.addQuestion("Please, enter a direction: ", function (response, convo) {
                 // fetch current maze
                 var game = convo.vars["game"];
                 var move;
@@ -68,13 +64,6 @@ module.exports = function (controller) {
                     case 'down': move = game.down(); break;
                     case 'left': move = game.left(); break;
                     case 'right': move = game.right(); break;
-
-                    case 'cancel':
-                    case 'stop':
-                    case 'exit':
-                        convo.say("Got it, leaving the game.");
-                        convo.next();
-                        return
 
                     default:
                         convo.say("Sorry, I did not get it.");
@@ -87,7 +76,7 @@ module.exports = function (controller) {
                 convo.say(`_moving ${response.text}..._`);
 
                 if (move.success) {
-
+                    
                     // Have we found the treasure
                     if (move.points == 5000) {
                         convo.transitionTo('success', `${move.thing}\n\nYou earned: **${move.points} points**`);
@@ -175,9 +164,9 @@ function createMaze(difficulty, points) {
     scores['?'] = 5000
 
     var levels = []
-    levels[0] = 'rookie'
-    levels[1] = 'seasoned'
-    levels[2] = 'expert'
+    levels[0] = 'Rookie'
+    levels[1] = 'Seasoned'
+    levels[2] = 'Expert'
 
     // Create Maze
     console.log("Starting a new Maze")
@@ -187,22 +176,4 @@ function createMaze(difficulty, points) {
     game.updateScore(points)
 
     return game;
-}
-
-function getPreferredLevel(controller, message, cb) {
-    // Check if a User preference already exists
-    var userId = message.raw_message.actorId;
-    controller.storage.users.get(userId, function (err, data) {
-        if (err) {
-            console.log("could not access storage, defaulting to level 0")
-            return cb(null, 0);
-        }
-
-        if (!data) {
-            console.log("no stored preference, defaulting to level 0")
-            return cb(null, 0);
-        }
-
-        return cb(null, data.value);
-    });
 }
