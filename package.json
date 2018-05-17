@@ -1,6 +1,6 @@
 {
   "description": "Botkit template for Webex Teams with Redis support",
-  "version": "0.7.0-redis1",
+  "version": "0.7.0-redis2",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
