@@ -1,6 +1,14 @@
-# Template to bootstrap a Botkit project for Webex Teams
+# Bootstrap a Botkit project for Webex Teams
 
-This template regroups a set of best practices:
+This template adds Redis support for Botkit storage:
+
+Simply ass a REDIS_URL variable to configure your redis engine, and the Botkit-Redis storage module gets automatically added and configured.
+
+All other features from the Botkit template's master branch apply (see below), BUT the capabity to run on glitch.
+
+-------
+
+Features: 
 
 - configuration: pass settings either through environment variables on the command line, or hard-coded values in the `.env` file. Note that command line variables are priorized over the `.env` file if present in both places.
 
@@ -15,18 +23,6 @@ This template regroups a set of best practices:
 - mentions: the appendMention utility function helps Webex Teams users remind to mention the bot in Group spaces.
 
 - popular cloud providers: the bot self-configures when run on Glitch and Heroku (if the dyno_metadata feature is activated)
-
-
-## Quick start on Glitch
-
-Click [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/CiscoDevNet/botkit-template)
-
-Then open the `.env` file and paste your bot's token into the ACCESS_TOKEN variable.
-
-You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space,
-Its healthcheck is accessible at your application public url, suffixed with "/ping" 
-
-_Note that thanks to Glitch 'PROJECT_DOMAIN' env variable, you did not need to add a PUBLIC_URL variable pointing to your app domain._
 
 
 ## Quick start on Heroku
