@@ -23,7 +23,7 @@ module.exports = function (controller, bot) {
         // Messaging platform
         "plaform": bot.type,
 
-        // the precise bot identity is loaded asynchronously, as /people/me request - issued by "BotKit CiscoSparkBot.js" - returns
+        // the precise bot identity is loaded asynchronously, from a GET /people/me request
         "identity": "unknown",
 
         // Endpoint where to check the bot is alive
@@ -37,13 +37,13 @@ module.exports = function (controller, bot) {
     // Adding a metadata endpoint
     //
     controller.webserver.get(process.env.BOTCOMMONS_ROUTE, function (req, res) {
-        // As the identity is load asynchronously from Cisco Spark token, we need to check until it's fetched
+        // As the identity is load asynchronously from the access token, we need to check until it's fetched
         if ((botcommons.identity == "unknown") && (bot.botkit.identity)) {
             botcommons.identity = bot.botkit.identity.emails[0];
         }
         res.json(botcommons);
     });
-    console.log("CiscoSpark: Bot metadata available at: " + process.env.BOTCOMMONS_ROUTE);
+    console.log("bot metadata available at: " + process.env.BOTCOMMONS_ROUTE);
 
     //
     // .botcommons skill

@@ -22,7 +22,7 @@ if (!accessToken) {
     process.exit(1);
 }
 
-// Get public URL where Cisco Spark will post spaces notifications (webhook registration)
+// Get public URL where the Webex cloud platform will post notifications (webhook registration)
 var public_url = process.env.PUBLIC_URL;
 // Infer the app domain for popular Cloud PaaS
 if (!public_url) {
@@ -85,7 +85,7 @@ controller.setupWebserver(port, function (err, webserver) {
     };
     webserver.get(process.env.HEALTHCHECK_ROUTE, function (req, res) {
 
-        // As the identity is load asynchronously from Cisco Spark token, we need to check until it's fetched
+        // As the identity is load asynchronously from the Webex Teams access token, we need to check until it's fetched
         if (healthcheck.bot == "unknown") {
             var identity = bot.botkit.identity;
             if (bot.botkit.identity) {
@@ -120,7 +120,7 @@ require("fs").readdirSync(normalizedPath).forEach(function (file) {
 
 
 //
-// Cisco Spark Utilities
+// Webex Teams Utilities
 //
 
 // Utility to add mentions if Bot is in a 'Group' space
