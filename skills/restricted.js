@@ -1,3 +1,6 @@
+//
+// Forces the user to pick among a predefined list of options
+//
 module.exports = function (controller) {
 
     controller.hears([/^restricted$/], "direct_message,direct_mention", function (bot, message) {

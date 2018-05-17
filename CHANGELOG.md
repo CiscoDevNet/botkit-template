@@ -4,6 +4,7 @@
    - introducing ACCESS_TOKEN env variable
    - backward compatibility for SPARK_TOKEN env variable
    - documentation updates (removing spark mentions)
+   - added popular skills from convos@sparkbot.io
 
 ### v0.6 (2017-11-17): legacy version for Cisco Spark
    - configuration through environment variables or hard-coded values in the .env file

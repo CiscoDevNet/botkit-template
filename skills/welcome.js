@@ -1,6 +1,5 @@
 //
-// Welcome message 
-// sent as the bot is added to a space
+// Welcome message sent as the bot is added to a space
 //
 module.exports = function (controller) {
 

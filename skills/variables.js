@@ -1,3 +1,6 @@
+//
+// Threaded conversation where variables are set to store user choices
+//
 module.exports = function (controller) {
 
     controller.hears([/^variables$/], "direct_message,direct_mention", function (bot, message) {

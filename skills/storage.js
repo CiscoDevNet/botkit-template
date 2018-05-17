@@ -1,5 +1,5 @@
 //
-// Stores a user choice in botkit 'users' storage, so that the value can be retreived later
+// Stores a user choice in Botkit 'users' storage, so that the value can be retreived later
 //
 module.exports = function (controller) {
 
