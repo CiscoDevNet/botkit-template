@@ -17,12 +17,17 @@ module.exports = function (controller) {
                 {
                     default: true,
                     callback: function (response, convo) {
-                        convo.say("Sorry, I don't know this color. Try another one...");
-                        convo.repeat();
-                        convo.next();
+                        convo.gotoThread('bad_response');
                     }
                 }
             ], { key: "answer" });
+
+
+            // Bad response
+            convo.addMessage({
+                text: "Sorry, I don't know this color.<br/>_Tip: try blue, green, pink, red or yellow!_",
+                action: 'default',
+            }, 'bad_response');
 
             // Confirmation thread
             convo.addMessage(
@@ -33,7 +38,7 @@ module.exports = function (controller) {
                 {
                     pattern: "^yes|hey|oui|si|da$",
                     callback: function (response, convo) {
-                        var pickedColor = convo.extractResponse('answer');                        
+                        var pickedColor = convo.extractResponse('answer');
                         convo.setVar("color", pickedColor);
                         convo.gotoThread("success");
                     },

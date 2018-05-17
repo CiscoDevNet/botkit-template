@@ -42,7 +42,8 @@ function showUserPreference(controller, bot, message, userId, color) {
                     // controller.storage.users.remove(userId, function (err) { 
                     controller.storage.users.delete(userId, function (err) {
                         if (err) {
-                            convo.say(message, 'sorry, could not access storage, err: ' + err.message);
+                            // [TODO] Turn into a thread or simply stop the current conversation
+                            // convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
                             return;
                         }

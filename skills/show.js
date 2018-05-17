@@ -28,7 +28,8 @@ module.exports = function (controller) {
                 {
                     default: true,
                     callback: function (response, convo) {
-                        convo.say("Sorry, this skill is not correct. Try again...");
+                        // [TODO] extract message into a thread
+                        //convo.say("Sorry, this skill is not correct. Try again...");
                         convo.repeat();
                         convo.next();
                     }
