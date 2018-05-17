@@ -140,3 +140,6 @@ bot.appendMention = function (message, command) {
 
     return "`" + command + "`";
 }
+
+// [COMPAT] Adding this function to ease interoperability with the skills part of the Botkit samples project
+bot.enrichCommand = bot.appendMention;
