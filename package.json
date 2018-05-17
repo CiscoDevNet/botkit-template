@@ -1,19 +1,20 @@
 {
-  "description": "Botkit template for Cisco Spark",
-  "version": "0.6.0-plugin1",
+  "description": "Modular Botkit template for Webex Teams",
+  "version": "0.7.0-plugin1",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
   "keywords": [
-    "ciscospark",
+    "webex",
+    "webex-teams",
     "botkit",
     "devnet"
   ],
   "author": "Stève Sfartz (Cisco DevNet) <stsfartz@cisco.com>",
   "license": "MIT",
   "dependencies": {
-    "botkit": "0.6.0",
+    "botkit": "0.6.14",
     "botkit-storage-redis": "1.1.0",
     "node-env-file": "0.1.8"
   },

@@ -1,20 +1,7 @@
 //
-// Adds meta information about the bot, and exposes them at a public endpoint 
+// Adds meta information about the bot
 //
 module.exports = function (controller, bot) {
-
-    //
-    // Adding a metadata endpoint
-    //
-    var botcommons = controller.metadata;    
-    controller.webserver.get(process.env.BOTCOMMONS_ROUTE, function (req, res) {
-        // As the identity is load asynchronously from Cisco Spark token, we need to check until it's fetched
-        if ((botcommons.identity == "unknown") && (bot.botkit.identity)) {
-            botcommons.identity = bot.botkit.identity.emails[0];
-        }
-        res.json(botcommons);
-    });
-    console.log("CiscoSpark: Bot metadata available at: " + process.env.BOTCOMMONS_ROUTE);
 
     //
     // .botcommons skill

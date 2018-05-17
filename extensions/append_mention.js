@@ -4,12 +4,12 @@
 //
 
 /*
- * Utility to add mentions if Bot is in a 'Group' space
+ * Utility to add mentions if the bot is in a 'Group' space
  * 
  */
 module.exports = function (bot) {
 
-    // Utility to add mentions if Bot is in a 'Group' space
+    // Add support for the append mention
     bot.appendMention = function (message, command) {
     
         // if the message is a raw message (from a post message callback such as bot.say())

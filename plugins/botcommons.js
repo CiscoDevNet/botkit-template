@@ -26,7 +26,9 @@ module.exports = function (controller, bot) {
         "support-contact": "Stève Sfartz <mailto:stsfartz@cisco.com>",
 
         // Messaging platform
-        "plaform": bot.type,
+        // [WORKAROUND] overriding Botkit's integrated support temporarly as 'ciscospark' is still returned
+        //"plaform": bot.type,
+        "plaform": "webex",
 
         // the precise bot identity is loaded asynchronously, as /people/me request - issued by "BotKit CiscoSparkBot.js" - returns
         "identity": "unknown",

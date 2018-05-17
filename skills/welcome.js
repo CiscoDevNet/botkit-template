@@ -1,6 +1,5 @@
 //
-// Welcome message 
-// sent as the bot is added to a Cisco Spark space
+// Welcome message sent as the bot is added to a space
 //
 module.exports = function (controller) {
 
@@ -17,14 +16,14 @@ module.exports = function (controller) {
             channel: event.channel
         }, function (err, rawMessage) {
             if (err) {
-                console.log("Error while postig back welcome message, err: " + err.message)
+                console.log("Error while posting back welcome message, err: " + err.message)
                 return;
             }
 
             var help = "Type `help` to learn about my skills.";
 
             if (rawMessage.roomType == "group") {
-                help = "Note that this is a 'Group' Space. I will answer only if mentionned.<br/>";
+                help = "Note that this is a 'Group' space. I will answer only if mentionned.<br/>";
                 help += "To learn about my skills, type " + bot.appendMention(rawMessage, "help");
             }
 

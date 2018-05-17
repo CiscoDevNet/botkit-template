@@ -8,22 +8,25 @@ var debug = require('debug')('starterkit');
 
 
 //
-// BotKit configuration
+// Botkit configuration
 //
 
 // Load environment variables from project .env file
 require('node-env-file')(__dirname + '/.env');
 
-// Fail fast
-if (!process.env.SPARK_TOKEN) {
-    console.log("Could not start as bots require a Cisco Spark API access token.");
-    console.log("Please add env variable SPARK_TOKEN on the command line or to the .env file");
+
+// Fetch token from environement
+// [COMPAT] supports SPARK_TOKEN for backward compatibility
+var accessToken = process.env.ACCESS_TOKEN || process.env.SPARK_TOKEN 
+if (!accessToken) {
+    console.log("Could not start as this bot requires a Webex Teams API access token.");
+    console.log("Please invoke with an ACCESS_TOKEN environment variable");
     console.log("Example: ");
-    console.log("> SPARK_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
+    console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
     process.exit(1);
 }
 
-// Get public URL where Cisco Spark will post spaces notifications (webhook registration)
+// Get public URL where the Webex cloud platform will post notifications (webhook registration)
 var public_url = process.env.PUBLIC_URL;
 // Infer the app domain for popular Cloud PaaS
 if (!public_url) {
@@ -42,7 +45,7 @@ if (!public_url) {
     console.log("Could not start as this bot must expose a public endpoint.");
     console.log("Please add env variable PUBLIC_URL on the command line or to the .env file");
     console.log("Example: ");
-    console.log("> SPARK_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
+    console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
     process.exit(1);
 }
 
@@ -51,14 +54,12 @@ if (!public_url) {
 // Create bot
 //
 
-var Botkit = require('botkit');
-
 var env = process.env.NODE_ENV || "development";
 
 var configuration = {
     public_address: process.env.PUBLIC_URL,
-    ciscospark_access_token: process.env.SPARK_TOKEN,
-    secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks if incoming payloads originate from Cisco Spark
+    ciscospark_access_token: accessToken,
+    secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks if incoming payloads originate from Webex
     webhook_name: process.env.WEBHOOK_NAME || ('built with BotKit (' + env + ')')
 }
 
@@ -87,9 +88,10 @@ catch (err) {
     }
 }
 
-var controller = require('botkit').sparkbot(configuration);
+var Botkit = require('botkit');
+var controller = Botkit.sparkbot(configuration);
 
-var sparkbot = controller.spawn({}, function (bot) {
+var webexbot = controller.spawn({}, function (bot) {
     
         // Load bot extensions: append_mention, botcommons metadata
         try {
@@ -129,7 +131,7 @@ controller.setupWebserver(process.env.PORT || 3000, function (err, webserver) {
         throw err;
     }
 
-    controller.createWebhookEndpoints(webserver, sparkbot, function (err, success) {
+    controller.createWebhookEndpoints(webserver, webexbot, function (err, success) {
         debug("Webhook successfully setup");
     });
 
@@ -139,7 +141,7 @@ controller.setupWebserver(process.env.PORT || 3000, function (err, webserver) {
         require("fs").readdirSync(pluginsPath).forEach(function (file) {
             try {
                 if (file.endsWith(".js")) {
-                    require("./plugins/" + file)(controller, sparkbot);
+                    require("./plugins/" + file)(controller, webexbot);
                     debug("plugin loaded: " + file);
                 }
             }

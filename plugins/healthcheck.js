@@ -21,7 +21,7 @@ module.exports = function (controller, bot) {
     var route = process.env.HEALTHCHECK_ROUTE || "/";
     controller.webserver.get(route, function (req, res) {
 
-        // As the identity is load asynchronously from Cisco Spark token, we need to check until it's fetched
+        // As the identity is load asynchronously from the access token, we need to check until it's fetched
         if (healthcheck.bot == "unknown") {
             var identity = bot.botkit.identity;
             if (bot.botkit.identity) {
@@ -32,5 +32,5 @@ module.exports = function (controller, bot) {
         res.json(healthcheck);
     });
 
-    console.log("Cisco Spark: healthcheck available at: " + route);
+    console.log("healthcheck available at: " + route);
 }    

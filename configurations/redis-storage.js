@@ -4,7 +4,7 @@
 //
 
 /**
- * Adds a persistent storage to Redis to BotKit configuration
+ * Adds a persistent storage to Redis to Botkit configuration
  *
  * Setup instructions:
  *    - add a REDIS_URL env variable pointing to the redis instance
@@ -28,7 +28,7 @@ module.exports = function (configuration) {
             //, namespace: 'cisco:devnet'         
         };
 
-        // Create Redis storage for BotKit
+        // Create Redis storage for Botkit
         try {
             var redisStorage = require('botkit-storage-redis')(redisConfig);
 

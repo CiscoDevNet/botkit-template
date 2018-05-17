@@ -42,7 +42,7 @@ function showSkill(skill, bot, message) {
     // Append .js extension
     var skill_source = skill + ".js";
 
-    // Read file contents
+    // Read skill contents
     var normalizedPath = require("path").join(__dirname, skill_source);
     require("fs").readFile(normalizedPath, 'utf8', function (err, data) {
         if (err) {
@@ -50,7 +50,7 @@ function showSkill(skill, bot, message) {
             return;
         }
 
-        // Post file contents back to Cisco Spark
+        // Post skill contents back to the space
         var code = "```javascript\n" + data + "\n```";
         bot.reply(message, code);
     });
