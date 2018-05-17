@@ -1,4 +1,4 @@
-# Botkit Template for Cisco Spark
+# Botkit Template for Webex
 
 This template regroups a set of best practices to bootstrap a Botkit project connecting to Cisco Spark.
 

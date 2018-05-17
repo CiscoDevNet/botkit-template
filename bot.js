@@ -10,11 +10,15 @@
 // Load environment variables from project .env file
 require('node-env-file')(__dirname + '/.env');
 
-if (!process.env.SPARK_TOKEN) {
-    console.log("Could not start as bots require a Cisco Spark API access token.");
-    console.log("Please add env variable SPARK_TOKEN on the command line or to the .env file");
+
+// Fetch token from environement
+// [COMPAT] supports SPARK_TOKEN for backward compatibility
+var accessToken = process.env.ACCESS_TOKEN || process.env.SPARK_TOKEN 
+if (!accessToken) {
+    console.log("Could not start as this bot requires a Webex Teams API access token.");
+    console.log("Please invoke with an ACCESS_TOKEN environment variable");
     console.log("Example: ");
-    console.log("> SPARK_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
+    console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
     process.exit(1);
 }
 
@@ -37,7 +41,7 @@ if (!public_url) {
     console.log("Could not start as this bot must expose a public endpoint.");
     console.log("Please add env variable PUBLIC_URL on the command line or to the .env file");
     console.log("Example: ");
-    console.log("> SPARK_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
+    console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
     process.exit(1);
 }
 
@@ -52,8 +56,8 @@ var env = process.env.NODE_ENV || "development";
 var controller = Botkit.sparkbot({
     log: true,
     public_address: public_url,
-    ciscospark_access_token: process.env.SPARK_TOKEN,
-    secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks of incoming payloads originate from Cisco Spark
+    ciscospark_access_token: accessToken,
+    secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks if incoming payloads originate from Webex
     webhook_name: process.env.WEBHOOK_NAME || ('built with BotKit (' + env + ')')
 });
 
@@ -68,7 +72,7 @@ var bot = controller.spawn({
 var port = process.env.PORT || 3000;
 controller.setupWebserver(port, function (err, webserver) {
     controller.createWebhookEndpoints(webserver, bot, function () {
-        console.log("Cisco Spark: Webhooks set up!");
+        console.log("webhooks setup completed!");
     });
 
     // installing Healthcheck
@@ -91,7 +95,7 @@ controller.setupWebserver(port, function (err, webserver) {
 
         res.json(healthcheck);
     });
-    console.log("Cisco Spark: healthcheck available at: " + process.env.HEALTHCHECK_ROUTE);
+    console.log("healthcheck available at: " + process.env.HEALTHCHECK_ROUTE);
 });
 
 
@@ -103,12 +107,12 @@ var normalizedPath = require("path").join(__dirname, "skills");
 require("fs").readdirSync(normalizedPath).forEach(function (file) {
     try {
         require("./skills/" + file)(controller, bot);
-        console.log("Cisco Spark: loaded skill: " + file);
+        console.log("loaded skill: " + file);
     }
     catch (err) {
         if (err.code == "MODULE_NOT_FOUND") {
             if (file != "utils") {
-                console.log("Cisco Spark: could not load skill: " + file);
+                console.log("could not load skill: " + file);
             }
         }
     }
