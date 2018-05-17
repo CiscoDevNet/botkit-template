@@ -1,5 +1,5 @@
 //
-// Stores a user choice in botkit 'users' storage, so that the value can be retreived later
+// Stores a user choice in Botkit 'users' storage, so that the value can be retreived later
 //
 module.exports = function (controller) {
 
@@ -22,8 +22,8 @@ module.exports = function (controller) {
                 return;
             }
 
-            // Ask for favorite color
-            askForFavoriteColor(controller, bot, message, userId);
+            // Ask for prefrence
+            askForUserPreference(controller, bot, message, userId);
         });
     });
 }
@@ -33,19 +33,14 @@ function showUserPreference(controller, bot, message, userId, color) {
 
         convo.sayFirst(`Hey, I know you <@personId:${userId}>!<br/> '${color}' is your favorite color.`);
 
-        // Remove user preferences if supported
-        if (!controller.storage.users.remove) {
-            convo.say("_To erase your preference, simply restart the bot as you're using in-memory transient storage._");
-            convo.next();
-            return;
-        }
-
-        convo.ask("Should I erase your preference?  yes/(no)", [
+        convo.ask("Should I erase your preference?  (yes/no)", [
             {
                 pattern: "^yes|ya|da|si|oui$",
                 callback: function (response, convo) {
 
-                    controller.storage.users.remove(userId, function (err) {
+                    // [WORKAROUND] use storage.users.delete if in-memory storage and storage.users.remove if redis storage
+                    // controller.storage.users.remove(userId, function (err) { 
+                    controller.storage.users.delete(userId, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
@@ -61,7 +56,7 @@ function showUserPreference(controller, bot, message, userId, color) {
             {
                 default: true,
                 callback: function (response, convo) {
-                    convo.say("Got it, leaving your color preference as is.");
+                    convo.say("Got it, leaving your preference as is.");
                     convo.next();
                 }
             }
@@ -69,7 +64,7 @@ function showUserPreference(controller, bot, message, userId, color) {
     });
 }
 
-function askForFavoriteColor(controller, bot, message, userId) {
+function askForUserPreference(controller, bot, message, userId) {
     bot.startConversation(message, function (err, convo) {
 
         convo.ask("What is your favorite color?", [
@@ -87,7 +82,7 @@ function askForFavoriteColor(controller, bot, message, userId) {
                             return;
                         }
 
-                        convo.transitionTo("success", `_stored user preference_`);
+                        convo.transitionTo("success", "_successfully stored user preference_");
                     });
 
                 },
@@ -95,12 +90,16 @@ function askForFavoriteColor(controller, bot, message, userId) {
             {
                 default: true,
                 callback: function (response, convo) {
-                    convo.say("Sorry, I don't know this color. Try another one...");
-                    convo.repeat();
-                    convo.next();
+                    convo.gotoThread('bad_response');
                 }
             }
         ], { key: "answer" });
+
+        // Bad response
+        convo.addMessage({
+            text: "Sorry, I don't know this color.<br/>_Tip: try blue, green, pink, red or yellow!_",
+            action: 'default',
+        }, 'bad_response');
 
         // Success thread
         convo.addMessage(
