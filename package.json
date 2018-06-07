@@ -1,12 +1,11 @@
 {
   "description": "Botkit template for Webex Teams",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
   "keywords": [
-    "webex",
     "webex-teams",
     "botkit",
     "devnet"

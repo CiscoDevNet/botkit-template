@@ -1,5 +1,9 @@
 # Changes
 
+### v0.8 (2018-06-07): metadata updates
+   - fix for botcommons 'platform' (formely 'plaform')
+   - turning botcommons and healtcheck JSON to snake_case (formely kebab-case)
+
 ### v0.7 (2018-05-17): reflecting Webex Teams rebrand
    - introducing ACCESS_TOKEN env variable
    - backward compatibility for SPARK_TOKEN env variable

@@ -15,15 +15,15 @@ module.exports = function (controller, bot) {
         "url": "https://github.com/CiscoDevNet/botkit-template",
 
         // Legal owner
-        "legal-owner": "Cisco DevNet <https://developer.cisco.com>",
+        "legal_owner": "Cisco DevNet <https://developer.cisco.com>",
 
         // Contact name for support
-        "support-contact": "Stève Sfartz <mailto:stsfartz@cisco.com>",
+        "support_contact": "Stève Sfartz <mailto:stsfartz@cisco.com>",
 
         // Messaging platform
         // [WORKAROUND] overriding Botkit's integrated support temporarly as 'ciscospark' is still returned
-        //"plaform": bot.type,
-        "plaform": "webex",
+        //"platform": bot.type,
+        "platform": "webex",
 
         // the precise bot identity is loaded asynchronously, from a GET /people/me request
         "identity": "unknown",
@@ -56,8 +56,8 @@ module.exports = function (controller, bot) {
         var metadata = '{\n'
             + '   "description" : "' + botcommons["description"] + '",\n'
             + '   "url"         : "' + botcommons["url"] + '",\n'
-            + '   "owner"       : "' + botcommons["legal-owner"] + '",\n'
-            + '   "support"     : "' + botcommons["support-contact"] + '",\n'
+            + '   "owner"       : "' + botcommons["legal_owner"] + '",\n'
+            + '   "support"     : "' + botcommons["support_contact"] + '",\n'
             + '   "healthcheck" : "' + botcommons["healthcheck"] + '",\n'
             + '}\n';
 

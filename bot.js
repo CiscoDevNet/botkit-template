@@ -17,7 +17,7 @@ var accessToken = process.env.ACCESS_TOKEN || process.env.SPARK_TOKEN
 if (!accessToken) {
     console.log("Could not start as this bot requires a Webex Teams API access token.");
     console.log("Please invoke with an ACCESS_TOKEN environment variable");
-    console.log("Example: ");
+    console.log("Example:");
     console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
     process.exit(1);
 }
@@ -77,7 +77,7 @@ controller.setupWebserver(port, function (err, webserver) {
 
     // installing Healthcheck
     var healthcheck = {
-        "up-since": new Date(Date.now()).toGMTString(),
+        "up_since": new Date(Date.now()).toGMTString(),
         "hostname": require('os').hostname() + ":" + port,
         "version": "v" + require("./package.json").version,
         "bot": "unknown",   // loaded asynchronously
