@@ -31,7 +31,7 @@ module.exports = function (controller) {
 function showUserPreference(controller, bot, message, userId, color) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.sayFirst(`Hey, I know you <@personId:${userId}>!<br/> '${color}' is your favorite color.`);
+        convo.sayFirst(`Hey, I know you! **'${color}'** is your favorite color.`);
 
         convo.ask("Should I erase your preference?  (yes/no)", [
             {
