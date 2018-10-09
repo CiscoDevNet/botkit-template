@@ -22,7 +22,7 @@ module.exports = function (controller) {
                 return;
             }
 
-            // Ask for prefrence
+            // Ask for preference
             askForUserPreference(controller, bot, message, userId);
         });
     });
@@ -31,23 +31,29 @@ module.exports = function (controller) {
 function showUserPreference(controller, bot, message, userId, color) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.sayFirst(`Hey, I know you <@personId:${userId}>!<br/> '${color}' is your favorite color.`);
+        convo.sayFirst(`Hey, I know you! **'${color}'** is your favorite color.`);
 
         convo.ask("Should I erase your preference?  (yes/no)", [
             {
                 pattern: "^yes|ya|da|si|oui$",
                 callback: function (response, convo) {
 
-                    // [WORKAROUND] use storage.users.delete if in-memory storage and storage.users.remove if redis storage
-                    // controller.storage.users.remove(userId, function (err) { 
-                    controller.storage.users.delete(userId, function (err) {
+                    // [WORKAROUND] Botkit uses different functions to delete persisted user data
+                    // - in-memory storage, use 'storage.users.delete()'
+                    // - redis storage, use 'storage.users.remove()'
+                    let deleteUserPref = controller.storage.users.delete;
+                    if (process.env.REDIS_URL) {
+                        deleteUserPref = controller.storage.users.remove;
+                    }
+                    
+                    deleteUserPref(userId, function (err) { 
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
                             return;
                         }
 
-                        convo.say("Successfully reset your color preference.");
+                        convo.say("Successfully reset your preference.");
                         convo.next();
                     });
 
