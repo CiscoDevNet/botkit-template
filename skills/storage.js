@@ -39,8 +39,7 @@ function showUserPreference(controller, bot, message, userId, color) {
                 callback: function (response, convo) {
 
                     // [WORKAROUND] use storage.users.delete if in-memory storage and storage.users.remove if redis storage
-                    // controller.storage.users.remove(userId, function (err) { 
-                    controller.storage.users.delete(userId, function (err) {
+                    controller.storage.users.remove(userId, function (err) { 
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
