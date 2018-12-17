@@ -4,8 +4,6 @@ This template regroups a set of best practices to bootstrap a Botkit project for
 
 **Take a look at the [redis](https://github.com/CiscoDevNet/botkit-template/tree/redis) and [pluggable architecture](https://github.com/CiscoDevNet/botkit-template/tree/plugin) branches for more advanced templates**
 
-**Check [Howdy's Botkit StarterKit](https://github.com/howdyai/botkit-starter-ciscospark) if you're planning to use [Botkit Studio](https://studio.botkit.ai/app)**
-
 
 ## Features
 
