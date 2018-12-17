@@ -1,5 +1,8 @@
 # Changes
 
+### v0.9 (2018-12-12): botkit framework update
+    - updating to Bokit v0.7
+
 ### v0.8 (2018-06-07): metadata updates
    - fix for botcommons 'platform' (formely 'plaform')
    - turning botcommons and healtcheck JSON to snake_case (formely kebab-case)
