@@ -73,14 +73,32 @@ function showUserPreference(controller, bot, message, userId, color) {
 function askForUserPreference(controller, bot, message, userId) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.ask("What is your favorite color?", [
+        convo.ask("What is your main course?\n1. Programming\n2. Accounting\n3. Network Computing\n4. Information System\n5. Server Administration\n6. Web Development", [
             {
-                pattern: "^blue|green|pink|red|yellow$",
+                pattern: "^programming|accounting|network[ computing]|information[ system]|server[ administration]|web development|1|2|3|4|5|6$",
                 callback: function (response, convo) {
 
                     // Store color as user preference
-                    var pickedColor = convo.extractResponse('answer');
-                    var userPreference = { id: userId, value: pickedColor };
+                    var pickedCourse = convo.extractResponse('answer');
+                    if (responses.answer == '1') {
+                        responses.answer = 'Programming';
+                    };
+                    if (responses.answer == '2') {
+                        responses.answer = 'Accounting';
+                    };
+                    if (responses.answer == '3' || responses.answer == 'network') {
+                        responses.answer = 'Network Computing';
+                    };
+                    if (responses.answer == '4' || responses.answer == 'information' || responses.answer == 'infosys') {
+                        responses.answer = 'Information System';
+                    };
+                    if (responses.answer == '5' || responses.answer == 'server') {
+                        responses.answer = 'Server Administration';
+                    };
+                    if (responses.answer == '6' || responses.answer == 'web' || responses.answer == 'webdev') {
+                        responses.answer = 'Web Development';
+                    };
+                    var userPreference = { id: userId, value: pickedCourse };
                     controller.storage.users.save(userPreference, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
@@ -103,13 +121,13 @@ function askForUserPreference(controller, bot, message, userId) {
 
         // Bad response
         convo.addMessage({
-            text: "Sorry, I don't know this color.<br/>_Tip: try blue, green, pink, red or yellow!_",
+            text: "Sorry, I don't know this course.<br/>_Tip: try programming, accounting, network, infosys, server, webdev_",
             action: 'default',
         }, 'bad_response');
 
         // Success thread
         convo.addMessage(
-            "Cool, I love '{{responses.answer}}' too",
+            "Cool, your main course is '{{responses.answer}}'",
             "success");
     });
 }
