@@ -3,7 +3,7 @@
 //
 module.exports = function (controller) {
 
-    controller.hears([/^storage$/], 'direct_message,direct_mention', function (bot, message) {
+    controller.hears([/^course$/], 'direct_message,direct_mention', function (bot, message) {
 
         // Check if a User preference already exists
         var userId = message.raw_message.actorId;
