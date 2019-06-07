@@ -127,7 +127,8 @@ function askForUserPreference(controller, bot, message, userId) {
 
         // Success thread
         convo.addMessage(
-            "Cool, your main course is '{{pickedCourse}}'",
+            // "Cool, your main course is '{{responses.answer}}'",
+            "Cool, your main course is '"+pickedCourse+"'",
             "success");
     });
 }
