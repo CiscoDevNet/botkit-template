@@ -7,7 +7,7 @@ module.exports = function (controller) {
 
         // Check if a User preference already exists
         var userId = message.raw_message.actorId;
-        controller.storage.users.get(userId, function (err, data) {
+        controller.storage.users.get(userId + "course", function (err, data) {
             if (err) {
                 bot.reply(message, 'could not access storage, err: ' + err.message, function (err, message) {
                     bot.reply(message, 'sorry, I am not feeling well \uF613! try again later...');
@@ -28,10 +28,10 @@ module.exports = function (controller) {
     });
 }
 
-function showUserPreference(controller, bot, message, userId, color) {
+function showUserPreference(controller, bot, message, userId, course) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.sayFirst(`Hey, I know you! **'${color}'** is your favorite color.`);
+        convo.sayFirst(`Hey, I know you! Your main course is **'${course}'**.`);
 
         convo.ask("Should I erase your preference?  (yes/no)", [
             {
@@ -46,7 +46,7 @@ function showUserPreference(controller, bot, message, userId, color) {
                         deleteUserPref = controller.storage.users.remove;
                     }
                     
-                    deleteUserPref(userId, function (err) { 
+                    deleteUserPref(userId + "course", function (err) { 
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
@@ -78,7 +78,7 @@ function askForUserPreference(controller, bot, message, userId) {
                 pattern: "^programming|accounting|network[ computing]|information[ system]|server[ administration]|web development|1|2|3|4|5|6$",
                 callback: function (response, convo) {
 
-                    // Store color as user preference
+                    // Store course as user preference
                     var pickedCourse = convo.extractResponse('answer');
                     if (responses.answer == '1') {
                         responses.answer = 'Programming';
@@ -98,7 +98,7 @@ function askForUserPreference(controller, bot, message, userId) {
                     if (responses.answer == '6' || responses.answer == 'web' || responses.answer == 'webdev') {
                         responses.answer = 'Web Development';
                     };
-                    var userPreference = { id: userId, value: pickedCourse };
+                    var userPreference = { id: userId + "course", value: pickedCourse };
                     controller.storage.users.save(userPreference, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
