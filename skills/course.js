@@ -35,7 +35,7 @@ function showUserPreference(controller, bot, message, userId, course) {
 
         convo.ask("Should I erase your preference?  (yes/no)", [
             {
-                pattern: "^yes|ya|da|si|oui$",
+                pattern: "^yes|y|ya|da|si|oui|shi$",
                 callback: function (response, convo) {
 
                     // [WORKAROUND] Botkit uses different functions to delete persisted user data
@@ -79,23 +79,23 @@ function askForUserPreference(controller, bot, message, userId) {
                 callback: function (response, convo) {
 
                     // Store course as user preference
-                    var pickedCourse = convo.extractResponse('answer');
-                    if (pickedCourse == '1') {
+                    var pickedCourse = convo.extractResponse('answer').toLowerCase();
+                    if (pickedCourse == '1' || pickedCourse == 'programming') {
                         pickedCourse = 'Programming';
                     };
-                    if (pickedCourse == '2') {
+                    if (pickedCourse == '2' || pickedCourse == 'accounting') {
                         pickedCourse = 'Accounting';
                     };
-                    if (pickedCourse == '3' || pickedCourse == 'network') {
+                    if (pickedCourse == '3' || pickedCourse == 'network' || pickedCourse == 'network computiong') {
                         pickedCourse = 'Network Computing';
                     };
-                    if (pickedCourse == '4' || pickedCourse == 'information' || pickedCourse == 'infosys') {
+                    if (pickedCourse == '4' || pickedCourse == 'information' || pickedCourse == 'infosys' || pickedCourse == 'infomation system') {
                         pickedCourse = 'Information System';
                     };
-                    if (pickedCourse == '5' || pickedCourse == 'server') {
+                    if (pickedCourse == '5' || pickedCourse == 'server' || pickedCourse == 'server admin' || pickedCourse == 'server administration') {
                         pickedCourse = 'Server Administration';
                     };
-                    if (pickedCourse == '6' || pickedCourse == 'web' || pickedCourse == 'webdev') {
+                    if (pickedCourse == '6' || pickedCourse == 'web' || pickedCourse == 'webdev' || pickedCourse == 'web development' || pickedCourse == 'web dev') {
                         pickedCourse = 'Web Development';
                     };
                     var userPreference = { id: userId + "course", value: pickedCourse };
