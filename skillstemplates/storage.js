@@ -1,21 +1,13 @@
 //
 // Stores a user choice in Botkit 'users' storage, so that the value can be retreived later
 //
-
-reg1 = /^1|[pP]ro(gram)?(gramming)?$/; // Programming
-reg2 = /^2|[aA]cc(ounting)?$/; // Accounting
-reg3 = /^3|[nN]et(work)?(working)?(work [cC]om)?(work [cC]omputing)?$/; // Network Computing
-reg4 = /^4|[iI]nfo(r)?(rmation)?(sys)?( sys)?( system)?$/; // Information System
-reg5 = /^5|[sS]erver(admin)?( admin)?( [aA]dministration)?$/; // Server Administration
-reg6 = /^6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/; // Web Development
-
 module.exports = function (controller) {
 
-    controller.hears([/^course$/], 'direct_message,direct_mention', function (bot, message) {
+    controller.hears([/^storage$/], 'direct_message,direct_mention', function (bot, message) {
 
         // Check if a User preference already exists
         var userId = message.raw_message.actorId;
-        controller.storage.users.get(userId + "course", function (err, data) {
+        controller.storage.users.get(userId, function (err, data) {
             if (err) {
                 bot.reply(message, 'could not access storage, err: ' + err.message, function (err, message) {
                     bot.reply(message, 'sorry, I am not feeling well \uF613! try again later...');
@@ -36,14 +28,14 @@ module.exports = function (controller) {
     });
 }
 
-function showUserPreference(controller, bot, message, userId, course) {
+function showUserPreference(controller, bot, message, userId, color) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.sayFirst(`Hey, I know you! Your main course is **'${course}'**.`);
+        convo.sayFirst(`Hey, I know you! **'${color}'** is your favorite color.`);
 
         convo.ask("Should I erase your preference?  (yes/no)", [
             {
-                pattern: "^yes|y|ya|da|si|oui|shi$",
+                pattern: "^yes|ya|da|si|oui$",
                 callback: function (response, convo) {
 
                     // [WORKAROUND] Botkit uses different functions to delete persisted user data
@@ -54,7 +46,7 @@ function showUserPreference(controller, bot, message, userId, course) {
                         deleteUserPref = controller.storage.users.remove;
                     }
                     
-                    deleteUserPref(userId + "course", function (err) { 
+                    deleteUserPref(userId, function (err) { 
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
                             convo.repeat();
@@ -81,17 +73,14 @@ function showUserPreference(controller, bot, message, userId, course) {
 function askForUserPreference(controller, bot, message, userId) {
     bot.startConversation(message, function (err, convo) {
 
-        convo.ask("What is your main course?\n1. Programming\n2. Accounting\n3. Network Computing\n4. Information System\n5. Server Administration\n6. Web Development", [
+        convo.ask("What is your favorite color?", [
             {
-                // pattern: "^programming|accounting|network[ computing]|information[ system]|server[ administration]|web[ development]|1|2|3|4|5|6$",
-                pattern: reg1|reg2|reg3|reg4|reg5|reg6,
+                pattern: "^blue|green|pink|red|yellow$",
                 callback: function (response, convo) {
-                    
 
-                    // Store course as user preference
-                    var pickedCourse = convo.extractResponse('answer').toLowerCase();
-                    
-                    var userPreference = { id: userId + "course", value: pickedCourse };
+                    // Store color as user preference
+                    var pickedColor = convo.extractResponse('answer');
+                    var userPreference = { id: userId, value: pickedColor };
                     controller.storage.users.save(userPreference, function (err) {
                         if (err) {
                             convo.say(message, 'sorry, could not access storage, err: ' + err.message);
@@ -114,40 +103,13 @@ function askForUserPreference(controller, bot, message, userId) {
 
         // Bad response
         convo.addMessage({
-            text: "Sorry, I don't know this course.<br/>_Tip: try programming, accounting, network, infosys, server, webdev_",
+            text: "Sorry, I don't know this color.<br/>_Tip: try blue, green, pink, red or yellow!_",
             action: 'default',
         }, 'bad_response');
 
         // Success thread
         convo.addMessage(
-            "Cool, your main course is '{{responses.answer}}'",
+            "Cool, I love '{{responses.answer}}' too",
             "success");
     });
-}
-
-function convertCourse(course) {
-    // reg1 = /^1|[pP]ro(gram)?(gramming)?$/; // Programming
-    // reg2 = /^2|[aA]cc(ounting)?$/; // Accounting
-    // reg3 = /^3|[nN]et(work)?(working)?(work [cC]om)?(work [cC]omputing)?$/; // Network Computing
-    // reg4 = /^4|[iI]nfo(r)?(rmation)?(sys)?( sys)?( system)?$/; // Information System
-    // reg5 = /^5|[sS]erver(admin)?( admin)?( [aA]dministration)?$/; // Server Administration
-    // reg6 = /^6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/; // Web Development
-    if (reg1.test(course)) {
-        return 'Programming';
-    };
-    if (reg2.test(course)) {
-        return 'Accounting';
-    };
-    if (reg3.test(course)) {
-        return 'Network Computing';
-    };
-    if (reg4.test(course)) {
-        return 'Information System';
-    };
-    if (reg5.test(course)) {
-        return 'Server Administration';
-    };
-    if (reg6.test(course)) {
-        return 'Web Development';
-    };
 }
