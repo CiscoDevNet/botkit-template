@@ -84,7 +84,7 @@ function askForUserPreference(controller, bot, message, userId) {
         convo.ask("What is your main course?\n1. Programming\n2. Accounting\n3. Network Computing\n4. Information System\n5. Server Administration\n6. Web Development", [
             {
                 // pattern: "^programming|accounting|network[ computing]|information[ system]|server[ administration]|web[ development]|1|2|3|4|5|6$",
-                pattern: reg1|reg2|reg3|reg4|reg5|reg6,
+                pattern: reg1||reg2||reg3||reg4||reg5||reg6,
                 callback: function (response, convo) {
                     
 
