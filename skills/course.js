@@ -8,6 +8,7 @@ reg3 = /^3|[nN]et(work)?(working)?(work [cC]om)?(work [cC]omputing)?$/; // Netwo
 reg4 = /^4|[iI]nfo(r)?(rmation)?(sys)?( sys)?( system)?$/; // Information System
 reg5 = /^5|[sS]erver(admin)?( admin)?( [aA]dministration)?$/; // Server Administration
 reg6 = /^6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/; // Web Development
+regex = /^1|[pP]ro(gram)?(gramming)?|2|[aA]cc(ounting)?|3|[nN]et(work)?(working)?(work [cC]om)?(work [cC]omputing)?|4|[iI]nfo(r)?(rmation)?(sys)?( sys)?( system)?|5|[sS]erver(admin)?( admin)?( [aA]dministration)?|6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/;
 
 module.exports = function (controller) {
 
@@ -84,7 +85,7 @@ function askForUserPreference(controller, bot, message, userId) {
         convo.ask("What is your main course?\n1. Programming\n2. Accounting\n3. Network Computing\n4. Information System\n5. Server Administration\n6. Web Development", [
             {
                 // pattern: "^programming|accounting|network[ computing]|information[ system]|server[ administration]|web[ development]|1|2|3|4|5|6$",
-                pattern: reg1||reg2||reg3||reg4||reg5||reg6,
+                pattern: regex,
                 callback: function (response, convo) {
                     
 
