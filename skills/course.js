@@ -10,6 +10,27 @@ reg5 = /^5|[sS]erver(admin)?( admin)?( [aA]dministration)?$/; // Server Administ
 reg6 = /^6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/; // Web Development
 regex = /^1|[pP]ro(gram)?(gramming)?|2|[aA]cc(ounting)?|3|[nN]et(work)?(working)?(work [cC]om)?(work [cC]omputing)?|4|[iI]nfo(r)?(rmation)?(sys)?( sys)?( system)?|5|[sS]erver(admin)?( admin)?( [aA]dministration)?|6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/;
 
+function convertCourse(course) {
+    if (reg1.test(course)) {
+        return 'Programming';
+    };
+    if (reg2.test(course)) {
+        return 'Accounting';
+    };
+    if (reg3.test(course)) {
+        return 'Network Computing';
+    };
+    if (reg4.test(course)) {
+        return 'Information System';
+    };
+    if (reg5.test(course)) {
+        return 'Server Administration';
+    };
+    if (reg6.test(course)) {
+        return 'Web Development';
+    };
+}
+
 module.exports = function (controller) {
 
     controller.hears([/^course$/], 'direct_message,direct_mention', function (bot, message) {
@@ -90,7 +111,7 @@ function askForUserPreference(controller, bot, message, userId) {
                     
 
                     // Store course as user preference
-                    var pickedCourse = convo.extractResponse('answer').toLowerCase();
+                    var pickedCourse = convertCourse(convo.extractResponse('answer').toLowerCase());
                     
                     var userPreference = { id: userId + "course", value: pickedCourse };
                     controller.storage.users.save(userPreference, function (err) {
@@ -124,31 +145,4 @@ function askForUserPreference(controller, bot, message, userId) {
             "Cool, your main course is '{{responses.answer}}'",
             "success");
     });
-}
-
-function convertCourse(course) {
-    // reg1 = /^1|[pP]ro(gram)?(gramming)?$/; // Programming
-    // reg2 = /^2|[aA]cc(ounting)?$/; // Accounting
-    // reg3 = /^3|[nN]et(work)?(working)?(work [cC]om)?(work [cC]omputing)?$/; // Network Computing
-    // reg4 = /^4|[iI]nfo(r)?(rmation)?(sys)?( sys)?( system)?$/; // Information System
-    // reg5 = /^5|[sS]erver(admin)?( admin)?( [aA]dministration)?$/; // Server Administration
-    // reg6 = /^6|[wW]eb(dev)?( dev)?( [dD]evelopment)?$/; // Web Development
-    if (reg1.test(course)) {
-        return 'Programming';
-    };
-    if (reg2.test(course)) {
-        return 'Accounting';
-    };
-    if (reg3.test(course)) {
-        return 'Network Computing';
-    };
-    if (reg4.test(course)) {
-        return 'Information System';
-    };
-    if (reg5.test(course)) {
-        return 'Server Administration';
-    };
-    if (reg6.test(course)) {
-        return 'Web Development';
-    };
 }
