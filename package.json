@@ -1,6 +1,6 @@
 {
-  "description": "Botkit template for Webex Teams",
-  "version": "0.9.0",
+  "description": "AskSummer Bot for Webex Teams",
+  "version": "0.9.1",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
@@ -10,7 +10,7 @@
     "botkit",
     "devnet"
   ],
-  "author": "Stève Sfartz (Cisco DevNet) <stsfartz@cisco.com>",
+  "author": "Summer Fang <jianbfan@cisco.com>",
   "license": "MIT",
   "dependencies": {
     "botkit": "0.7.0",
@@ -18,6 +18,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CiscoDevNet/botkit-template.git"
+    "url": "https://github.com/summerfang/asksummer.git"
   }
 }
