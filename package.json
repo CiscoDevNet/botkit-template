@@ -1,23 +1,20 @@
 {
-  "description": "Botkit template for Webex Teams",
-  "version": "0.9.0",
+  "name": "botkit-template",
+  "version": "1.0.0",
+  "description": "",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "webex-teams",
-    "botkit",
-    "devnet"
-  ],
-  "author": "Stève Sfartz (Cisco DevNet) <stsfartz@cisco.com>",
-  "license": "MIT",
   "dependencies": {
-    "botkit": "0.7.0",
-    "node-env-file": "0.1.8"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/CiscoDevNet/botkit-template.git"
+    "botbuilder-adapter-webex": "^1.0.4",
+    "botbuilder-storage-mongodb": "^0.9.5",
+    "botbuilder-storage-redis": "^1.0.9",
+    "botkit": "^4.6.0",
+    "botkit-plugin-cms": "^1.0.3",
+    "dotenv": "^7.0.0",
+    "redis": "^2.8.0",
+    "uuid": "^3.3.3"
   }
 }

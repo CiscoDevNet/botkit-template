@@ -1,98 +1,86 @@
-# Botkit Template for Webex Teams
+# Botkit template
 
-This template regroups a set of best practices to bootstrap a Botkit project for Webex Teams.
+This project implements a Botkit + Webex Teams adapter bot, based on the [generator-botkit](https://www.npmjs.com/package/generator-botkit) Yoeman template, providing a few extra good-practice features, plus several interesting samples:
 
-**Take a look at the [redis](https://github.com/CiscoDevNet/botkit-template/tree/redis) and [pluggable architecture](https://github.com/CiscoDevNet/botkit-template/tree/plugin) branches for more advanced templates**
+- A 'health check' URL: check bot availability, uptime and metadata by browsing to the bot's public URL
 
+- Quality-of-life features: fallback/catch-all module, welcome message when user joins a space
 
-## Features
+- 'Help' command auto-generation framework
 
-- configuration: pass settings either through environment variables on the command line, or hard-coded values in the `.env` file. Note that command line variables are priorized over the `.env` file if present in both places.
+- Redis/MongoDB storage support for persistent/scalable storage of conversation state
 
-- skills: organize your bot behaviours by placing 'commands', 'conversations' and 'events' in the [skills directory](skills/README.md).
+- checkAddMention() function to automatically format bot commands for 1-1 or group space usage
 
-- user experience: the template comes ready-to-use skills: a 'welcome' invite, as well as 'help' and 'fallback' commands.
+## How to run (local machine)
 
-- healthcheck: easilly check that everything goes well by hitting the `ping` endpoint automatically exposed.
+Assuming you plan to expose your bot via [ngrok](https://ngrok.com), you can run this template in a jiffy:
 
-- metadata: expose extra info via command and on a public address so that Webex Teams users can inquire on Bot Author / Legal mentions / Healthcheck endpoint...
+1. Clone this repo:
 
-- mentions: the appendMention utility function helps Webex Teams users remind to mention the bot in 'Group' spaces.
+    ```sh
+    git clone https://github.com/CiscoDevNet/botkit-template.git
+    ```
 
-- popular cloud providers: the bot self-configures when run on Glitch and Heroku (when Dyno Metadata are activated).
+1. Install the Node.js dependencies:
 
+    ```sh
+    cd botkit-template
+    npm install
+    ```
 
-## Quick start on Glitch
+1. Create a Webex Teams bot account at ['Webex for Developers'](https://developer.webex.com/my-apps/new/bot), and note/save your bot's access token
 
-Click [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/CiscoDevNet/botkit-template)
-
-Then open the `.env` file and paste your bot's token into the ACCESS_TOKEN variable.
-
-You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space,
-Its healthcheck is accessible at your application public url, suffixed with "/ping" 
-
-_Note that thanks to Glitch 'PROJECT_DOMAIN' env variable, you did not need to add a PUBLIC_URL variable pointing to your app domain._
-
-
-## Quick start on Heroku
-
-Create a new project pointing to this repo.
-
-Reach to your app settings, reveal your config variables, and add an ACCESS_TOKEN variable with your bot token as value.
-
-Unless your app is using [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata), you also need to add a PUBLIC_URL variable pointing to your app domain.
-
-![](docs/heroku_config-variables.png)
-
-You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space,
-Its healthcheck is accessible at your application public url, suffixed with "/ping" 
-
-
-## How to run on your local machine (with ngrok)
-
-Assuming you plan to expose your bot via [ngrok](https://ngrok.com),
-you can run this template in a snatch.
-
-1. Create a Bot Account from the ['Webex for developers' bot creation page](https://developer.webex.com/add-bot.html), and copy your bot's access token.
-
-2. Launch ngrok to expose port 3000 of your local machine to the internet:
+1. Launch ngrok to expose port 3000 of your local machine to the internet:
 
     ```sh
     ngrok http 3000
     ```
 
-    Pick the HTTPS address that ngrok is now exposing. Note that ngrok exposes HTTP and HTTPS protocols, make sure to pick the HTTPS address.
+    Note/save the 'Forwarding' HTTPS (not HTTP) address that ngrok generates
 
-3. [Optional] Open the `.env` file and modify the settings to accomodate your bot.
+1. Edit the `.env` file and configure the settings and info for your bot.
 
-    _Note that you can also specify any of these settings via env variables. In practice, the values on the command line or in your machine env will prevail over .env file settings_
+    >Note: you can also specify any of these settings via environment variables (which will take precedent over any settings configured in the `.env` file)...often preferred in production environments
 
-    To successfully run your bot, you'll need to specify a PUBLIC_URL for your bot, and an ACCESS_TOKEN for the Webex Teams REST API (either by updating the `.env` settings file or via environment variables). Note that in the examples below, we use environment variables specified on the command line.
-    
-4. You're ready to run your bot!
+    To successfully run, you'll need to specify at minimum a `PUBLIC_ADDRESS` (ngrok HTTPS forwarding URL), and a `ACCESS_TOKEN` (Webex Teams bot access token.)
 
-    From a bash shell:
+    >If running on Glitch.me or Heroku (with [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata) enbaled), the `PUBLIC_URL` will be auto-configured
 
-    ```shell
-    git clone https://github.com/CiscoDevNet/botkit-template
-    cd botkit-template
-    npm install
-    ACCESS_TOKEN=0123456789abcdef PUBLIC_URL=https://abcdef.ngrok.io node bot.js
+    Additional values in the `.env` file (like `OWNER` and `CODE`) are used to populate the healthcheck URL metadata
+
+    Be sure to save the `.env` file!
+
+1. You're ready to run your bot:
+
+    ```sh
+    node bot.js
     ```
 
-    From a windows shell:
+## Quick start on Glitch.me
 
-    ```shell
-    > git clone https://github.com/CiscoDevNet/botkit-template
-    > cd botkit-template
-    > npm install
-    > set ACCESS_TOKEN=0123456789abcdef
-    > set PUBLIC_URL=https://abcdef.ngrok.io
-    > node bot.js
-    ```
+* Click [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/CiscoDevNet/botkit-template)
 
-    where:
+* Open the `.env` file, then uncomment the `ACCESS_TOKEN` variable and paste in your bot's access token
 
-    - ACCESS_TOKEN is the API access token of your Webex Teams bot
-    - PUBLIC_URL is the root URL at which the Webex cloud platform can reach your bot
-    - [ngrok](http://ngrok.com) helps you expose the bot running on your laptop to the internet, type: `ngrok http 3000` to launch
+    **Optional**: enter appropirate info in the "Bot meta info..." section
+
+    >Note that thanks to Glitch `PROJECT_DOMAIN` env variable, you do not need to add a `PUBLIC_URL` variable pointing to your app domain
+
+You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space!
+
+You can verify the bot is up and running by browsing to its healthcheck URL (i.e. the app domain.)
+
+## Quick start on Heroku
+
+* Create a new project pointing to this repo.
+
+* Open your app settings, view your config variables, and add an ACCESS_TOKEN variable with your bot's access token as value.
+
+* Unless your app is using [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata), you also need to add a PUBLIC_URL variable pointing to your app domain.
+
+![](assets/images/heroku_config-variables.png)
+
+You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space!
+
+You can verify the bot is up and running by browsing to its healthcheck URL (i.e. the app domain.)
