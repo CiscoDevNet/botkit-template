@@ -24,7 +24,6 @@
 const { Botkit } = require('botkit');
 const { BotkitCMSHelper } = require('botkit-plugin-cms');
 
-
 // Import a platform-specific adapter for webex.
 
 const { WebexAdapter } = require('botbuilder-adapter-webex');
@@ -88,13 +87,16 @@ if (process.env.CMS_URI) {
         uri: process.env.CMS_URI,
         token: process.env.CMS_TOKEN,
     }));
-}
+};
+
+controller.commandHelp = [];
 
 // Once the bot has booted up its internal services, you can use them to do stuff.
 controller.ready(() => {
 
     // load traditional developer-created local custom feature modules
     controller.loadModules(__dirname + '/features');
+    console.log( 'Health check available at: ' + process.env.PUBLIC_ADDRESS );
 });
 
 controller.webserver.get('/', (req, res) => {
@@ -113,7 +115,3 @@ controller.checkAddMention = function( roomType, command ) {
 
     return `\`${ command }\``
 }
-
-controller.commandHelp = [];
-
-console.log( 'Health check available at: ' + process.env.PUBLIC_ADDRESS );

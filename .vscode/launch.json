@@ -5,12 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/bot.js",
-            "envFile": "${workspaceRoot}/.env",
-            "env": {
-                "ACCESS_TOKEN": "PLACE_YOUR_ACCESS_TOKEN_HERE_FOR_DEBUG_PURPOSE",
-                "PUBLIC_URL": "https://718670a3.ngrok.io"
-            }
+            "program": "${workspaceRoot}/bot.js"
         }
     ]
 }
