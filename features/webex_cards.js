@@ -3,7 +3,7 @@
 //
 module.exports = function(controller) {
 
-    controller.adapter.registerAdaptiveCardWebhookSubscription( '/api/messages' );
+    controller.adapter.registerAdaptiveCardWebhookSubscription( controller.getConfig( 'webhook_uri' ) );
 
     controller.hears( 'monitor', 'message,direct_message', async ( bot, message ) => {
 
