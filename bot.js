@@ -99,6 +99,8 @@ controller.ready(() => {
     console.log( 'Health check available at: ' + process.env.PUBLIC_ADDRESS );
 });
 
+controller.publicFolder( '/www', __dirname + '/www' );
+
 controller.webserver.get('/', (req, res) => {
 
     res.send( JSON.stringify( controller.botCommons, null, 4 ) );
