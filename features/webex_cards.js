@@ -92,54 +92,54 @@ module.exports = function(controller) {
                     'content': {
                         'type': 'AdaptiveCard',
                         'version': '1.0',
-                        "body": [
+                        'body': [
                             {
-                                "type": "ColumnSet",
-                                "columns": [
+                                'type': 'ColumnSet',
+                                'columns': [
                                     {
-                                        "type": "Column",
-                                        "width": "stretch",
-                                        "items": [
+                                        'type': 'Column',
+                                        'width': 'stretch',
+                                        'items': [
                                             {
-                                                "type": "TextBlock",
-                                                "text": "VM Monitor",
-                                                "size": "ExtraLarge",
-                                                "weight": "Bolder",
-                                                "horizontalAlignment": "Center"
+                                                'type': 'TextBlock',
+                                                'text': 'VM Monitor',
+                                                'size': 'ExtraLarge',
+                                                'weight': 'Bolder',
+                                                'horizontalAlignment': 'Center'
                                             },
                                             {
-                                                "type": "TextBlock",
-                                                "text": "Data for Host:"
+                                                'type': 'TextBlock',
+                                                'text': 'Data for Host:'
                                             },
                                             {
-                                                "type": "TextBlock",
-                                                "text": `${ hostName }`,
-                                                "weight": "Bolder"
+                                                'type': 'TextBlock',
+                                                'text': `${ hostName }`,
+                                                'weight': 'Bolder'
                                             }
                                         ],
-                                        "verticalContentAlignment": "Center",
-                                        "horizontalAlignment": "Center"
+                                        'verticalContentAlignment': 'Center',
+                                        'horizontalAlignment': 'Center'
                                     },
                                     {
-                                        "type": "Column",
-                                        "width": "stretch",
-                                        "items": [
+                                        'type': 'Column',
+                                        'width': 'stretch',
+                                        'items': [
                                             {
-                                                "type": "Image",
-                                                "altText": "",
-                                                "url": `${ process.env.PUBLIC_ADDRESS }/www/monitor.png`
+                                                'type': 'Image',
+                                                'altText': '',
+                                                'url': `${ process.env.PUBLIC_ADDRESS }/www/monitor.png`
                                             }
                                         ]
                                     }
                                 ]
                             },
                             {
-                                "type": "Image",
-                                "altText": "",
-                                "url": `${ process.env.PUBLIC_ADDRESS }/www/stats.png`
+                                'type': 'Image',
+                                'altText': '',
+                                'url': `${ process.env.PUBLIC_ADDRESS }/www/stats.png`
                             }
                         ],
-                        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json"
+                        '$schema': 'http://adaptivecards.io/schemas/adaptive-card.json'
                     }
                 }
             ]
