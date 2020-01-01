@@ -20,20 +20,11 @@
 
 // This is the main file for the template bot.
 
-// Import Botkit's core features
-const { Botkit } = require('botkit');
-const { BotkitCMSHelper } = require('botkit-plugin-cms');
-
-// Import a platform-specific adapter for webex.
-
-const { WebexAdapter } = require('botbuilder-adapter-webex');
 
 // Load process.env values from .env file
 require('dotenv').config();
 
-// Load random UUID generator
-const uuidv4 = require('uuid/v4');
-
+let public_url = process.env.PUBLIC_ADDRESS;
 if (!process.env.PUBLIC_ADDRESS) {
 
     // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
@@ -48,15 +39,14 @@ if (!process.env.PUBLIC_ADDRESS) {
 }
 
 let storage = null;
+if (process.env.REDIS_URL) {
 
-if ( process.env.REDIS_URL ) {
-
-    const redis = require( 'redis' );
-    const { RedisDbStorage } = require( 'botbuilder-storage-redis' );
+    const redis = require('redis');
+    const { RedisDbStorage } = require('botbuilder-storage-redis');
 
     // Initialize redis client
     const redisClient = redis.createClient(process.env.REDIS_URL, { prefix: 'bot-storage:' });
-    storage = new RedisDbStorage( redisClient );
+    storage = new RedisDbStorage(redisClient);
 }
 
 if (process.env.MONGO_URI) {
@@ -64,17 +54,22 @@ if (process.env.MONGO_URI) {
     const { MongoDbStorage } = require('botbuilder-storage-mongodb');
 
     storage = mongoStorage = new MongoDbStorage({
-        url : process.env.MONGO_URI,
+        url: process.env.MONGO_URI,
     });
 }
 
+// Create Webex Adapter
+const uuidv4 = require('uuid/v4');
+const { WebexAdapter } = require('botbuilder-adapter-webex');
 const adapter = new WebexAdapter({
-    
-    access_token: process.env.ACCESS_TOKEN,
-    public_address: process.env.PUBLIC_ADDRESS,
-    secret: uuidv4()
-})    
 
+    access_token: process.env.ACCESS_TOKEN,
+    public_address: public_url,
+    secret: uuidv4()
+});
+
+// Create Botkit controller
+const { Botkit } = require('botkit');
 const controller = new Botkit({
 
     webhook_uri: '/api/messages',
@@ -83,6 +78,7 @@ const controller = new Botkit({
 });
 
 if (process.env.CMS_URI) {
+    const { BotkitCMSHelper } = require('botkit-plugin-cms');
     controller.usePlugin(new BotkitCMSHelper({
         uri: process.env.CMS_URI,
         token: process.env.CMS_TOKEN,
@@ -96,24 +92,24 @@ controller.ready(() => {
 
     // load traditional developer-created local custom feature modules
     controller.loadModules(__dirname + '/features');
-    console.log( 'Health check available at: ' + process.env.PUBLIC_ADDRESS );
+    console.log('Health check available at: ' + public_url);
 });
 
-controller.publicFolder( '/www', __dirname + '/www' );
+controller.publicFolder('/www', __dirname + '/www');
 
 controller.webserver.get('/', (req, res) => {
 
-    res.send( JSON.stringify( controller.botCommons, null, 4 ) );
+    res.send(JSON.stringify(controller.botCommons, null, 4));
 });
 
-controller.checkAddMention = function( roomType, command ) {
+controller.checkAddMention = function (roomType, command) {
 
     var botName = adapter.identity.displayName;
 
-    if ( roomType == 'group' ) {
-        
-        return `\`@${ botName } ${ command }\``
+    if (roomType == 'group') {
+
+        return `\`@${botName} ${command}\``
     }
 
-    return `\`${ command }\``
+    return `\`${command}\``
 }
