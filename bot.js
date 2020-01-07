@@ -24,9 +24,19 @@
 var path = require('path');
 require('dotenv').config();
 
+if (!process.env.WEBEX_ACCESS_TOKEN) {
+    console.log( 'Token missing: please provide a valid Webex Teams user or bot access token in .env or via WEBEX_ACCESS_TOKEN environment variable');
+    process.exit(1);
+}
+
+if (!process.env.PUBLIC_URL) {
+    console.log( 'Public URL missing: please provide a publically reachable app URL in .env or via PUBLIC_URL environment variable');
+    process.exit(1);
+}
+
 var public_url;
 
-if (process.env.PUBLIC_ADDRESS) public_url = process.env.PUBLIC_ADDRESS
+if (process.env.PUBLIC_URL) public_url = process.env.PUBLIC_URL
 else {
 
     // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
@@ -64,7 +74,7 @@ const uuidv4 = require('uuid/v4');
 const { WebexAdapter } = require('botbuilder-adapter-webex');
 const adapter = new WebexAdapter({
 
-    access_token: process.env.ACCESS_TOKEN,
+    access_token: process.env.WEBEX_ACCESS_TOKEN,
     public_address: public_url,
     secret: uuidv4()
 });
@@ -86,13 +96,16 @@ if (process.env.CMS_URI) {
     }));
 };
 
-controller.commandHelp = [];
 
 // Once the bot has booted up its internal services, you can use them to do stuff.
 controller.ready(() => {
 
     // load traditional developer-created local custom feature modules
     controller.loadModules(path.join(__dirname, 'features'));
+    // Register attachmentActions webhook
+    controller.adapter.registerAdaptiveCardWebhookSubscription( controller.getConfig( 'webhook_uri' ) );
+    // Make the app public_url available to feature modules, for use in adaptive card content links
+    controller.public_url = public_url;
     console.log('Health check available at: ' + public_url);
 });
 
@@ -102,6 +115,8 @@ controller.webserver.get('/', (req, res) => {
 
     res.send(JSON.stringify(controller.botCommons, null, 4));
 });
+
+controller.commandHelp = [];
 
 controller.checkAddMention = function (roomType, command) {
 

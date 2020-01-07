@@ -3,8 +3,6 @@
 //
 module.exports = function(controller) {
 
-    controller.adapter.registerAdaptiveCardWebhookSubscription( controller.getConfig( 'webhook_uri' ) );
-
     controller.hears( 'monitor', 'message,direct_message', async ( bot, message ) => {
 
         await bot.reply( message, {
@@ -40,7 +38,7 @@ module.exports = function(controller) {
                                             {
                                                 'type': 'Image',
                                                 'altText': '',
-                                                'url': `${ process.env.PUBLIC_ADDRESS }/www/monitor.png`
+                                                'url': `${controller.public_url}/www/monitor.png`
                                             }
                                         ]
                                     }
@@ -127,7 +125,7 @@ module.exports = function(controller) {
                                             {
                                                 'type': 'Image',
                                                 'altText': '',
-                                                'url': `${ process.env.PUBLIC_ADDRESS }/www/monitor.png`
+                                                'url': `${controller.public_url}/www/monitor.png`
                                             }
                                         ]
                                     }
@@ -136,7 +134,7 @@ module.exports = function(controller) {
                             {
                                 'type': 'Image',
                                 'altText': '',
-                                'url': `${ process.env.PUBLIC_ADDRESS }/www/stats.png`
+                                'url': `${controller.public_url}/www/stats.png`
                             }
                         ],
                         '$schema': 'http://adaptivecards.io/schemas/adaptive-card.json'
