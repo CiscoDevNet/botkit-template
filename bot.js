@@ -15,30 +15,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //  __   __  ___        ___
-// |__) /  \  |  |__/ |  |  
-// |__) \__/  |  |  \ |  |  
+// |__) /  \  |  |__/ |  |
+// |__) \__/  |  |  \ |  |
 
 // This is the main file for the template bot.
 
-
 // Load process.env values from .env file
+var path = require('path');
 require('dotenv').config();
 
-let public_url = process.env.PUBLIC_ADDRESS;
-if (!process.env.PUBLIC_ADDRESS) {
+var public_url;
+
+if (process.env.PUBLIC_ADDRESS) public_url = process.env.PUBLIC_ADDRESS
+else {
 
     // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
     if (process.env.HEROKU_APP_NAME) {
-        public_url = 'https://' + process.env.HEROKU_APP_NAME + '.herokuapp.com';
+        public_url = 'https://' + process.env.HEROKU_APP_NAME + '.herokuapp.com'
     }
 
     // Glitch hosting
     if (process.env.PROJECT_DOMAIN) {
-        public_url = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me';
+        public_url = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me'
     }
 }
 
-let storage = null;
+var storage;
+
 if (process.env.REDIS_URL) {
 
     const redis = require('redis');
@@ -53,9 +56,7 @@ if (process.env.MONGO_URI) {
 
     const { MongoDbStorage } = require('botbuilder-storage-mongodb');
 
-    storage = mongoStorage = new MongoDbStorage({
-        url: process.env.MONGO_URI,
-    });
+    storage = new MongoDbStorage({ url: process.env.MONGO_URI })
 }
 
 // Create Webex Adapter
@@ -81,7 +82,7 @@ if (process.env.CMS_URI) {
     const { BotkitCMSHelper } = require('botkit-plugin-cms');
     controller.usePlugin(new BotkitCMSHelper({
         uri: process.env.CMS_URI,
-        token: process.env.CMS_TOKEN,
+        token: process.env.CMS_TOKEN
     }));
 };
 
@@ -91,7 +92,7 @@ controller.commandHelp = [];
 controller.ready(() => {
 
     // load traditional developer-created local custom feature modules
-    controller.loadModules(__dirname + '/features');
+    controller.loadModules(path.join(__dirname, 'features'));
     console.log('Health check available at: ' + public_url);
 });
 
@@ -106,7 +107,7 @@ controller.checkAddMention = function (roomType, command) {
 
     var botName = adapter.identity.displayName;
 
-    if (roomType == 'group') {
+    if (roomType === 'group') {
 
         return `\`@${botName} ${command}\``
     }
