@@ -21,7 +21,6 @@
 // This is the main file for the template bot.
 
 // Load process.env values from .env file
-var path = require('path');
 require('dotenv').config();
 
 if (!process.env.WEBEX_ACCESS_TOKEN) {
@@ -29,25 +28,25 @@ if (!process.env.WEBEX_ACCESS_TOKEN) {
     process.exit(1);
 }
 
-if (!process.env.PUBLIC_URL) {
-    console.log( 'Public URL missing: please provide a publically reachable app URL in .env or via PUBLIC_URL environment variable');
-    process.exit(1);
-}
 
-var public_url;
-
-if (process.env.PUBLIC_URL) public_url = process.env.PUBLIC_URL
-else {
-
+// Read public URL from env, 
+// if not specified, try to infer it from public cloud platforms environments
+// if still not successful, exit
+var public_url = process.env.PUBLIC_URL;
+if (!public_url) {
     // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
     if (process.env.HEROKU_APP_NAME) {
-        public_url = 'https://' + process.env.HEROKU_APP_NAME + '.herokuapp.com'
+        public_url = 'https://' + process.env.HEROKU_APP_NAME + '.herokuapp.com';
     }
 
     // Glitch hosting
     if (process.env.PROJECT_DOMAIN) {
-        public_url = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me'
+        public_url = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me';
     }
+}
+if (!public_url) {
+   console.log( 'Public URL missing: please provide a publically reachable app URL in .env or via PUBLIC_URL environment variable');
+   process.exit(1);
 }
 
 var storage;
@@ -98,6 +97,7 @@ if (process.env.CMS_URI) {
 
 
 // Once the bot has booted up its internal services, you can use them to do stuff.
+const path = require('path');
 controller.ready(() => {
 
     // load traditional developer-created local custom feature modules
