@@ -10,7 +10,7 @@ This project implements a Botkit + Webex Teams adapter bot, based on the [genera
 
 - Redis/MongoDB storage support for persistent/scalable storage of conversation state
 
-- checkAddMention() function to automatically format bot commands for 1-1 or group space usage
+- checkAddMention() function to automatically format bot commands for 1:1 or group space usage
 
 ## How to run (local machine)
 
@@ -20,12 +20,13 @@ Assuming you plan to expose your bot via [ngrok](https://ngrok.com), you can run
 
     ```sh
     git clone https://github.com/CiscoDevNet/botkit-template.git
+
+    cd botkit-template
     ```
 
 1. Install the Node.js dependencies:
 
     ```sh
-    cd botkit-template
     npm install
     ```
 
@@ -43,7 +44,7 @@ Assuming you plan to expose your bot via [ngrok](https://ngrok.com), you can run
 
     >Note: you can also specify any of these settings via environment variables (which will take precedent over any settings configured in the `.env` file)...often preferred in production environments
 
-    To successfully run, you'll need to specify at minimum a `PUBLIC_URL` (ngrok HTTPS forwarding URL), and a `WEBEX_ACCESS_TOKEN` (Webex Teams bot access token.)
+    To successfully run, you'll need to specify at minimum a `PUBLIC_URL` (ngrok HTTPS forwarding URL), and a `WEBEX_ACCESS_TOKEN` (Webex Teams bot access token)
 
     >If running on Glitch.me or Heroku (with [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata) enbaled), the `PUBLIC_URL` will be auto-configured
 
