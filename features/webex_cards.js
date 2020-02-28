@@ -5,6 +5,13 @@ module.exports = function(controller) {
 
     controller.hears( 'monitor', 'message,direct_message', async ( bot, message ) => {
 
+        if (!controller.public_url) {
+            await bot.reply( message, {
+                text: 'Please configure the PUBLIC_URL setting to enable this sample feature'
+            } );
+            return;
+        }
+
         await bot.reply( message, {
             text: 'VM Monitor',
             attachments: [

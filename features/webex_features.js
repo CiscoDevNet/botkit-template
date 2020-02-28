@@ -28,10 +28,10 @@ module.exports = function(controller) {
     });
 
 
-    controller.hears('create a room','message,direct_message', async(bot, message) => {
+    controller.hears('create','message,direct_message', async(bot, message) => {
 
         // create a room
-        let room = await bot.api.rooms.create({title: 'botkit test room'});
+        let room = await bot.api.rooms.create({title: 'Botkit test room'});
 
         // add user as member (bot is automatically added)
         let membership2 = await bot.api.memberships.create({
@@ -45,8 +45,10 @@ module.exports = function(controller) {
     });
 
     controller.on('memberships.created', async(bot, message) => {
-        console.log('memberships created', message);
+        console.log('membership created: ', message);
     });
 
+    controller.commandHelp.push( { command: 'create', text: 'Create a 1:1 space between the bot and the user' } );
+    controller.commandHelp.push( { command: 'delete', text: 'Delete a message dynamically' } );
 
 }

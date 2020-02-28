@@ -26,4 +26,6 @@
 
             await bot.beginDialog( 'flag_colors' );
         });
+
+        controller.commandHelp.push( { command: 'quiz', text: 'Conversation/thread example implementing a flag quiz' } );
     }

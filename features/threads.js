@@ -36,4 +36,7 @@
 
             await bot.beginDialog( 'states_quiz' );
         });
+
+        controller.commandHelp.push( { command: 'states', text: 'Conversation/thread example implementing a state quiz' } );
+
     }
