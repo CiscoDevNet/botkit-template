@@ -32,7 +32,7 @@
 
         controller.addDialog( convo );
 
-        controller.hears( 'states', 'message,direct_message', async( bot, message ) => {
+        controller.hears( 'states', 'message,direct_message', async ( bot, message ) => {
 
             await bot.beginDialog( 'states_quiz' );
         });

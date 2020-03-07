@@ -11,8 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/bot.js",
-            "runtimeExecutable": "/home/dstaudt/.nvm/versions/node/v12.14.1/bin/node"
+            "program": "${workspaceFolder}/bot.js"
         }
     ]
 }

@@ -26,7 +26,7 @@ module.exports = function ( controller ) {
     convo.ask( question, [
         {
             pattern: respPattern,
-            handler: async( response, convo, bot ) => {
+            handler: async ( response, convo, bot ) => {
 
                 await bot.say( { markdown:  getSource( response ) } );
                 await convo.stop();

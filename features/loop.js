@@ -79,7 +79,7 @@ module.exports = function (controller) {
 
     controller.addDialog( convo );
 
-    controller.hears( 'loop', 'message,direct_message', async( bot, message ) => {
+    controller.hears( 'loop', 'message,direct_message', async ( bot, message ) => {
 
         await bot.beginDialog( 'loop_chat' );
     });

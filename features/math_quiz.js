@@ -101,7 +101,7 @@ module.exports = function (controller) {
         }
     }
 
-    controller.hears( 'math', 'message,direct_message', async( bot, message ) => {
+    controller.hears( 'math', 'message,direct_message', async ( bot, message ) => {
 
         await bot.beginDialog( 'math_chat' );
     });

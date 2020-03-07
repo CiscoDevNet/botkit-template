@@ -22,7 +22,7 @@
 
         controller.addDialog( convo );
 
-        controller.hears( 'quiz', 'message,direct_message', async( bot, message ) => {
+        controller.hears( 'quiz', 'message,direct_message', async ( bot, message ) => {
 
             await bot.beginDialog( 'flag_colors' );
         });

@@ -10,7 +10,7 @@ module.exports = function(controller) {
     const NEW_ROOM_DIALOG = 'new_room_dialog';
     const dialog = new BotkitConversation(NEW_ROOM_DIALOG, controller);
     dialog.say('I created this room so we could continue our conversation in private...');
-    dialog.ask('How does that sound?', async(response, convo, bot) => {
+    dialog.ask('How does that sound?', async (response, convo, bot) => {
 
     }, {key: 'how_it_sounds'});
     dialog.say('Ah, {{vars.how_it_sounds}}, eh?');
@@ -18,7 +18,7 @@ module.exports = function(controller) {
 
     controller.addDialog(dialog);
 
-    controller.hears('delete','message,direct_message', async(bot, message) => {
+    controller.hears('delete','message,direct_message', async (bot, message) => {
 
         let reply = await bot.reply(message,'This message will be deleted in a few seconds.');
         setTimeout(async () => {
@@ -28,7 +28,7 @@ module.exports = function(controller) {
     });
 
 
-    controller.hears('create','message,direct_message', async(bot, message) => {
+    controller.hears('create','message,direct_message', async (bot, message) => {
 
         // create a room
         let room = await bot.api.rooms.create({title: 'Botkit test room'});
@@ -44,7 +44,7 @@ module.exports = function(controller) {
 
     });
 
-    controller.on('memberships.created', async(bot, message) => {
+    controller.on('memberships.created', async (bot, message) => {
         console.log('membership created: ', message);
     });
 

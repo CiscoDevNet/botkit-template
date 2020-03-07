@@ -16,7 +16,7 @@ module.exports = function (controller) {
         code: process.env.CODE
     }
 
-    controller.hears( 'about', 'message,direct_message', async( bot, message ) => {
+    controller.hears( 'about', 'message,direct_message', async ( bot, message ) => {
 
         let markDown = '```json\n';
         markDown += JSON.stringify( controller.botCommons, null, 4 );

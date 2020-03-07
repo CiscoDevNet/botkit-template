@@ -10,14 +10,14 @@ module.exports = function( controller ) {
     convo.say( 'This is a Botkit conversation sample.' );
     convo.ask(
         'What is your favorite color?',
-        async( answer, convo, bot ) => {},
+        async ( answer, convo, bot ) => {},
         'stated_color' 
     );
     convo.say( `Cool, I like {{ vars.stated_color }} too!` );
 
     controller.addDialog( convo );
 
-    controller.hears( 'favorite', 'message,direct_message', async( bot, message ) => {
+    controller.hears( 'favorite', 'message,direct_message', async ( bot, message ) => {
 
         await bot.beginDialog( 'fav_color_chat' );
     });
