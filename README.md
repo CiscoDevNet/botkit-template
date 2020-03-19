@@ -73,7 +73,7 @@ Assuming you plan to us [ngrok](https://ngrok.com) to give your bot a publically
 
 * Click [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/CiscoDevNet/botkit-template)
 
-* Open the `.env` file, then uncomment the `ACCESS_TOKEN` variable and paste in your bot's access token
+* Open the `.env` file.  For the `WEBEX_ACCESS_TOKEN` variable, paste in your bot's access token
 
     **Optional**: enter appropirate info in the "Bot meta info..." section
 
@@ -87,7 +87,7 @@ You can verify the bot is up and running by browsing to its healthcheck URL (i.e
 
 * Create a new project pointing to this repo.
 
-* Open your app settings, view your config variables, and add an ACCESS_TOKEN variable with your bot's access token as value.
+* Open your app settings, view your config variables, and add an WEBEX_ACCESS_TOKEN variable with your bot's access token as value.
 
 * Unless your app is using [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata), you also need to add a PUBLIC_URL variable pointing to your app domain.
 
