@@ -73,11 +73,15 @@ Assuming you plan to us [ngrok](https://ngrok.com) to give your bot a publically
 
 * Click [![Remix on Glitch](https://cdn.glitch.com/2703baf2-b643-4da7-ab91-7ee2a2d00b5b%2Fremix-button.svg)](https://glitch.com/edit/#!/import/github/CiscoDevNet/botkit-template)
 
-* Open the `.env` file.  For the `WEBEX_ACCESS_TOKEN` variable, paste in your bot's access token
+* Delete the `.env` file that Glitch created automatically
 
-    **Optional**: enter appropirate info in the "Bot meta info..." section
+* Rename `.env.example` to `.env`, then open it for editing.
 
-    >Note that thanks to Glitch `PROJECT_DOMAIN` env variable, you do not need to add a `PUBLIC_URL` variable pointing to your app domain
+    Find the `WEBEX_ACCESS_TOKEN` variable, paste in your bot's access token
+
+    **Optional**: enter appropriate info in the "Bot meta info..." section
+
+    >Note that, thanks to the Glitch `PROJECT_DOMAIN` env variable, you do not need to add a `PUBLIC_URL` variable pointing to your app domain
 
 You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space!
 
@@ -87,12 +91,18 @@ You can verify the bot is up and running by browsing to its healthcheck URL (i.e
 
 * Create a new project pointing to this repo.
 
-* Open your app settings, view your config variables, and add an WEBEX_ACCESS_TOKEN variable with your bot's access token as value.
+* Open your app's **Settings** tab, and reveal your **Config Vars**
 
-* Unless your app is using [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata), you also need to add a PUBLIC_URL variable pointing to your app domain.
+* Add a `WEBEX_ACCESS_TOKEN` variable with your bot's access token as value
 
-![](assets/images/heroku_config-variables.png)
+* Add a `PUBLIC_URL` variable pointing to your app's Heroku URL
 
-You bot is all set, responding in 1-1 and 'group' spaces, and sending a welcome message when added to a space!
+    >If your app is using [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata), the public URL will be detected automatically
 
-You can verify the bot is up and running by browsing to its healthcheck URL (i.e. the app domain.)
+    ![](assets/images/heroku_config-variables.png)
+
+* In the upper right under the **More** dropdown, select **Restart all dynos**    
+
+You bot is all set!  You can invite it to 1-1 and 'group' spaces, see it sending a welcome message when added, and responding to commands (try `help`.)
+
+You can always verify the bot is operational by browsing to its healthcheck URL (i.e. the app domain.)

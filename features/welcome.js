@@ -6,6 +6,9 @@ module.exports = function (controller) {
 
     controller.on( 'memberships.created', async ( bot, message ) => {
 
+        // If the person being added to a space isn't the bot, exit
+        if ( message.data.personId != controller.adapter.identity.id )  return;
+
         let markDown = `Hi, I am the **${ controller.adapter.identity.displayName }** bot!  \n`
         markDown += 'Type `help` to learn more about my skills.  ';
 

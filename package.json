@@ -8,10 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "botbuilder-adapter-webex": "^1.0.5",
+    "botbuilder-adapter-webex": "^1.0.7",
     "botbuilder-storage-mongodb": "^0.9.5",
-    "botbuilder-storage-redis": "^1.0.9",
-    "botkit": "^4.6.2",
+    "botbuilder-storage-redis": "^1.0.10",
+    "botkit": "^4.8.1",
     "botkit-plugin-cms": "^1.0.3",
     "dotenv": "^8.2.0",
     "redis": "^2.8.0",
