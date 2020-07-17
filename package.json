@@ -1,20 +1,29 @@
 {
   "name": "botkit-template",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "This project implements a Botkit + Webex Teams adapter bot, based on the [generator-botkit](https://www.npmjs.com/package/generator-botkit) Yoeman template, providing a few extra good-practice features, plus several interesting samples:",
   "main": "bot.js",
-  "scripts": {
-    "start": "node bot.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
-    "botbuilder-adapter-webex": "^1.0.7",
+    "botbuilder-adapter-webex": "^1.0.8",
     "botbuilder-storage-mongodb": "^0.9.5",
     "botbuilder-storage-redis": "^1.0.10",
-    "botkit": "^4.8.1",
-    "botkit-plugin-cms": "^1.0.3",
+    "botkit": "^4.9.0",
     "dotenv": "^8.2.0",
-    "redis": "^2.8.0",
-    "uuid": "^3.4.0"
-  }
+    "redis": "^3.0.2",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CiscoDevNet/botkit-template.git"
+  },
+  "author": "dstaudt@cisco.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CiscoDevNet/botkit-template/issues"
+  },
+  "homepage": "https://github.com/CiscoDevNet/botkit-template#readme"
 }

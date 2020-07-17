@@ -53,11 +53,11 @@ Assuming you plan to us [ngrok](https://ngrok.com) to give your bot a publically
 
 1. Rename the `env.example` file to `.env`, then edit to configure the settings and info for your bot.
 
-    >Note: you can also specify any of these settings via environment variables (which will take precedent over any settings configured in the `.env` file)...often preferred in production environments
+    >Note: you can also specify any of these settings via environment variables (which will take precedent over any settings configured in the `.env` file) - often preferred in production environments.
 
-    To successfully run all of the sample features, you'll need to specify at minimum a `PUBLIC_URL` (ngrok HTTPS forwarding URL), and a `WEBEX_ACCESS_TOKEN` (Webex Teams bot access token)
+    To successfully run all of the sample features, you'll need to specify at minimum a `PUBLIC_URL` (ngrok HTTPS forwarding URL), and a `WEBEX_ACCESS_TOKEN` (Webex Teams bot access token).
 
-    >If running on Glitch.me or Heroku (with [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata) enbaled), the `PUBLIC_URL` will be auto-configured
+    >If running on Glitch.me or Heroku (with [Dyno Metadata](https://devcenter.heroku.com/articles/dyno-metadata) enbaled), the `PUBLIC_URL` will be auto-configured.
 
     Additional values in the `.env` file (like `OWNER` and `CODE`) are used to populate the healthcheck URL meta-data.
 

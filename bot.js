@@ -53,7 +53,7 @@ if (process.env.REDIS_URL) {
 
     // Initialize redis client
     const redisClient = redis.createClient(process.env.REDIS_URL, { prefix: 'bot-storage:' });
-    storage = new RedisDbStorage(redisClient);
+    storage = new RedisDbStorage(redisClient, 3600); // Keep redis data for 3600 seconds
 }
 
 if (process.env.MONGO_URI) {
@@ -64,11 +64,13 @@ if (process.env.MONGO_URI) {
 }
 
 // Create Webex Adapter
-const uuidv4 = require('uuid/v4');
+// const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 const { WebexAdapter } = require('botbuilder-adapter-webex');
 
-// If PUBLIC_URL not configured, supply a dummy pulic_address
-// If using websockets, don't supply a secret
+// If PUBLIC_URL not configured, supply a dummy public_address
+// If using websockets, don't supply a secret or Botkit will try/fail to
+//   validate non-existent secret field for incoming events
 const adapter = new WebexAdapter({
 
     access_token: process.env.WEBEX_ACCESS_TOKEN,
