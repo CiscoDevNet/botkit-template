@@ -9,7 +9,7 @@
     "botbuilder-storage-redis": "^1.0.10",
     "botkit": "^4.10.0",
     "dotenv": "^8.2.0",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "uuid": "^8.3.0"
   },
   "devDependencies": {},
