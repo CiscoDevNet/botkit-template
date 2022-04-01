@@ -1,6 +1,6 @@
 # Build a personal chatbox for Webex
 
-Chatbox is an interesting and full potential technology. I think it might be the killer of Web.
+Chatbox is an interesting and full potential technology. I think it might be the killer of Web. This is also my learning for Webex developer site.
 
 # Botkit Template for Webex Teams
 
