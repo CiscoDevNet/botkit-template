@@ -1,145 +1,181 @@
-//
-// Copyright (c) 2017 Cisco Systems
-// Licensed under the MIT License 
-//
+// Copyright (c) 2018 Cisco and/or its affiliates.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//  __   __  ___        ___
+// |__) /  \  |  |__/ |  |
+// |__) \__/  |  |  \ |  |
 
-//
-// BotKit configuration
-//
+// This is the main file for the template bot.
 
-// Load environment variables from project .env file
-require('node-env-file')(__dirname + '/.env');
+// Load process.env values from .env file
+require('dotenv').config();
 
-
-// Fetch token from environement
-// [COMPAT] supports SPARK_TOKEN for backward compatibility
-var accessToken = process.env.ACCESS_TOKEN || process.env.SPARK_TOKEN 
-if (!accessToken) {
-    console.log("Could not start as this bot requires a Webex Teams API access token.");
-    console.log("Please invoke with an ACCESS_TOKEN environment variable");
-    console.log("Example:");
-    console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
+if (!process.env.WEBEX_ACCESS_TOKEN) {
+    console.log( '\n-->Token missing: please provide a valid Webex Teams user or bot access token in .env or via WEBEX_ACCESS_TOKEN environment variable');
     process.exit(1);
 }
 
-// Get public URL where the Webex cloud platform will post notifications (webhook registration)
+// Read public URL from env, 
+// if not specified, try to infer it from public cloud platforms environments
 var public_url = process.env.PUBLIC_URL;
-// Infer the app domain for popular Cloud PaaS
-if (!public_url) {
 
+if (!public_url) {
     // Heroku hosting: available if dyno metadata are enabled, https://devcenter.heroku.com/articles/dyno-metadata
     if (process.env.HEROKU_APP_NAME) {
-        public_url = "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com";
+        public_url = 'https://' + process.env.HEROKU_APP_NAME + '.herokuapp.com';
     }
 
     // Glitch hosting
     if (process.env.PROJECT_DOMAIN) {
-        public_url = "https://" + process.env.PROJECT_DOMAIN + ".glitch.me";
+        public_url = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me';
     }
 }
-if (!public_url) {
-    console.log("Could not start as this bot must expose a public endpoint.");
-    console.log("Please add env variable PUBLIC_URL on the command line or to the .env file");
-    console.log("Example: ");
-    console.log("> ACCESS_TOKEN=XXXXXXXXXXXX PUBLIC_URL=YYYYYYYYYYYYY node bot.js");
-    process.exit(1);
+
+var storage;
+
+if (process.env.REDIS_URL) {
+
+    const redis = require('redis');
+    const { RedisDbStorage } = require('botbuilder-storage-redis');
+
+    // Initialize redis client
+    const redisClient = redis.createClient(process.env.REDIS_URL, { prefix: 'bot-storage:' });
+    storage = new RedisDbStorage(redisClient, 3600); // Keep redis data for 3600 seconds
 }
 
+if (process.env.MONGO_URI) {
 
-//
-// Create bot
-//
+    const { MongoDbStorage } = require('botbuilder-storage-mongodb');
 
-var Botkit = require('botkit');
+    storage = new MongoDbStorage({ url: process.env.MONGO_URI })
+}
 
-var env = process.env.NODE_ENV || "development";
-var controller = Botkit.sparkbot({
-    log: true,
-    public_address: public_url,
-    ciscospark_access_token: accessToken,
-    secret: process.env.SECRET, // this is a RECOMMENDED security setting that checks if incoming payloads originate from Webex
-    webhook_name: process.env.WEBHOOK_NAME || ('built with BotKit (' + env + ')')
+// Create Webex Adapter
+// const uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
+const { WebexAdapter } = require('botbuilder-adapter-webex');
+
+// If PUBLIC_URL not configured, supply a dummy public_address
+// If using websockets, don't supply a secret or Botkit will try/fail to
+//   validate non-existent secret field for incoming events
+const adapter = new WebexAdapter({
+
+    access_token: process.env.WEBEX_ACCESS_TOKEN,
+    public_address: public_url ? public_url : 'http://127.0.0.1',
+    secret: ( process.env.WEBSOCKET_EVENTS == 'True' ) ? null : uuidv4()
 });
 
-var bot = controller.spawn({
+const { Botkit } = require('botkit');
+
+const controller = new Botkit({
+
+    webhook_uri: '/api/messages',
+    adapter: adapter,
+    storage
 });
 
+// Create Botkit controller
 
-//
-// Launch bot
-//
+if (process.env.CMS_URI) {
+    const { BotkitCMSHelper } = require('botkit-plugin-cms');
+    controller.usePlugin(new BotkitCMSHelper({
+        uri: process.env.CMS_URI,
+        token: process.env.CMS_TOKEN
+    }));
+};
 
-var port = process.env.PORT || 3000;
-controller.setupWebserver(port, function (err, webserver) {
-    controller.createWebhookEndpoints(webserver, bot, function () {
-        console.log("webhooks setup completed!");
+// Once the bot has booted up its internal services, you can use them to do stuff.
+const path = require('path');
+
+// Express response stub to supply to processWebsocketActivity
+// Luckily, the Webex adapter doesn't do anything meaningful with it
+class responseStub {
+    status(){}
+    end(){}
+}
+
+function processWebsocketActivity( event ) {
+    // Express request stub to fool the Activity processor
+    let requestStub = {};
+    // Event details are expected in a 'body' property
+    requestStub.body = event;
+
+    // Hand the event off to the Botkit activity processory
+    controller.adapter.processActivity( requestStub, new responseStub, controller.handleTurn.bind( controller ) )
+}
+
+controller.ready( async () => {
+    // load developer-created custom feature modules
+    controller.loadModules(path.join(__dirname, 'features'));
+
+    if ( ( !public_url ) && ( process.env.WEBSOCKET_EVENTS !== 'True' ) ) {
+        console.log( '\n-->No inbound event channel available.  Please configure at least one of PUBLIC_URL and/or WEBSOCKET_EVENTS' );
+        process.exit( 1 );
+    }
+
+    if ( public_url ) {
+        // Make the app public_url available to feature modules, for use in adaptive card content links
+        controller.public_url = public_url;
+    }
+
+    if ( process.env.WEBSOCKET_EVENTS == 'True' ) {
+
+        await controller.adapter._api.memberships.listen();
+        controller.adapter._api.memberships.on( 'created', ( event ) => processWebsocketActivity( event ) );
+        controller.adapter._api.memberships.on( 'updated', ( event ) => processWebsocketActivity( event ) );
+        controller.adapter._api.memberships.on( 'deleted', ( event ) => processWebsocketActivity( event ) );
+
+        await controller.adapter._api.messages.listen();
+        controller.adapter._api.messages.on('created', ( event ) => processWebsocketActivity( event ) );
+        controller.adapter._api.messages.on('deleted', ( event ) => processWebsocketActivity( event ) );
+
+        await controller.adapter._api.attachmentActions.listen();
+        controller.adapter._api.attachmentActions.on('created', ( event ) => processWebsocketActivity( event ) );
+
+        // Remove unnecessary auto-created webhook subscription
+        await controller.adapter.resetWebhookSubscriptions();
+
+        console.log( 'Using websockets for incoming messages/events');
+    }
+    else {
+        // Register attachmentActions webhook
+        controller.adapter.registerAdaptiveCardWebhookSubscription( controller.getConfig( 'webhook_uri' ) );
+    }
+});
+
+if (public_url) {
+    controller.publicFolder('/www', __dirname + '/www');
+
+    controller.webserver.get('/', (req, res) => {
+        res.send(JSON.stringify(controller.botCommons, null, 4));
     });
 
-    // installing Healthcheck
-    var healthcheck = {
-        "up_since": new Date(Date.now()).toGMTString(),
-        "hostname": require('os').hostname() + ":" + port,
-        "version": "v" + require("./package.json").version,
-        "bot": "unknown",   // loaded asynchronously
-        "botkit": "v" + bot.botkit.version()
-    };
-    webserver.get(process.env.HEALTHCHECK_ROUTE, function (req, res) {
-
-        // As the identity is load asynchronously from the Webex Teams access token, we need to check until it's fetched
-        if (healthcheck.bot == "unknown") {
-            var identity = bot.botkit.identity;
-            if (bot.botkit.identity) {
-                healthcheck.bot = bot.botkit.identity.emails[0];
-            }
-        }
-
-        res.json(healthcheck);
-    });
-    console.log("healthcheck available at: " + process.env.HEALTHCHECK_ROUTE);
-});
-
-
-//
-// Load skills
-//
-
-var normalizedPath = require("path").join(__dirname, "skills");
-require("fs").readdirSync(normalizedPath).forEach(function (file) {
-    try {
-        require("./skills/" + file)(controller, bot);
-        console.log("loaded skill: " + file);
-    }
-    catch (err) {
-        if (err.code == "MODULE_NOT_FOUND") {
-            if (file != "utils") {
-                console.log("could not load skill: " + file);
-            }
-        }
-    }
-});
-
-
-//
-// Webex Teams Utilities
-//
-
-// Utility to add mentions if Bot is in a 'Group' space
-bot.appendMention = function (message, command) {
-
-    // if the message is a raw message (from a post message callback such as bot.say())
-    if (message.roomType && (message.roomType == "group")) {
-        var botName = bot.botkit.identity.displayName;
-        return "`@" + botName + " " + command + "`";
-    }
-
-    // if the message is a Botkit message
-    if (message.raw_message && (message.raw_message.data.roomType == "group")) {
-        var botName = bot.botkit.identity.displayName;
-        return "`@" + botName + " " + command + "`";
-    }
-
-    return "`" + command + "`";
+    console.log('Health check available at: ' + public_url);
 }
 
-// [COMPAT] Adding this function to ease interoperability with the skills part of the Botkit samples project
-bot.enrichCommand = bot.appendMention;
+controller.commandHelp = [];
+
+controller.checkAddMention = function (roomType, command) {
+
+    var botName = adapter.identity.displayName;
+
+    if (roomType === 'group') {
+
+        return `\`@${botName} ${command}\``
+    }
+
+    return `\`${command}\``
+}
