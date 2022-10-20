@@ -24,7 +24,7 @@
 require('dotenv').config();
 
 if (!process.env.WEBEX_ACCESS_TOKEN) {
-    console.log( '\n-->Token missing: please provide a valid Webex Teams user or bot access token in .env or via WEBEX_ACCESS_TOKEN environment variable');
+    console.log( '\n-->Token missing: please provide a valid Webex user or bot access token in .env or via WEBEX_ACCESS_TOKEN environment variable');
     process.exit(1);
 }
 
